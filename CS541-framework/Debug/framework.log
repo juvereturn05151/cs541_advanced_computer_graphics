@@ -1,0 +1,207 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  emulator.cpp
+  transform.cpp
+  simplexnoise.cpp
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(179,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(185,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(205,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(206,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(216,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(223,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(230,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(239,17): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(248,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(254,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(286,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(287,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(288,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(289,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(290,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(291,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(303,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(310,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(317,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(324,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(333,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(340,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(341,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(406,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(407,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(408,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(409,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(410,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(411,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(412,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(413,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(414,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(415,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(416,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(417,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(431,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(438,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(445,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(452,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(459,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\simplexnoise.cpp(467,17): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  shapes.cpp
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(307,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(308,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(309,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(313,27): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(314,27): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(318,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(319,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(320,26): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(324,27): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(325,27): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(500,21): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(564,24): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(577,24): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(588,24): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(679,13): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(684,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shapes.cpp(685,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  object.cpp
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\object.cpp(93,25): warning C4018: '<': signed/unsigned mismatch
+  interact.cpp
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\interact.cpp(109,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\interact.cpp(110,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\interact.cpp(114,30): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\interact.cpp(115,30): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+  texture.cpp
+  shader.cpp
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\shader.cpp(26,16): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+  scene.cpp
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(47,24): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(48,31): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(86,23): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(86,62): warning C4305: '+=': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(87,42): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(93,85): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(93,77): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(93,69): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(104,13): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(112,43): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(113,44): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(114,33): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(114,62): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(115,34): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(115,63): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(232,48): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(234,48): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(242,56): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(242,51): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(242,46): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(249,46): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(249,72): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(249,67): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(249,62): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(250,47): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(250,73): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(250,68): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(250,63): warning C4305: 'argument': truncation from 'double' to 'const float'
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(297,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(298,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(301,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(302,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(303,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(305,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(306,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(307,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(308,22): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(309,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(310,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(311,23): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(312,22): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\scene.cpp(343,34): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+  imgui_widgets.cpp
+  imgui_draw.cpp
+  imgui_demo.cpp
+  imgui.cpp
+  imgui_impl_opengl3.cpp
+  imgui_impl_glfw.cpp
+  framework.cpp
+  fbo.cpp
+  Generating Code...
+cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  rply.c
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(374,10): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(462,10): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(492,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(510,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(534,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(559,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(573,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(1228,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(1243,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(1246,9): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\rply.c(1268,5): warning C4996: 'vsprintf': This function or variable may be unsafe. Consider using vsprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+fbo.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  framework.vcxproj -> E:\DigiPenMasterCourse\Semester1_2024\CS541_Graphics\cs541_advanced_computer_graphics\CS541-framework\Debug\framework.exe
+  .\libs\glbinding.dll
+  1 File(s) copied
