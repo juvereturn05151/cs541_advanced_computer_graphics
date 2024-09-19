@@ -25,6 +25,43 @@ const float pi = 3.14159f;
 glm::mat4 Rotate(const int i, const float theta)
 {
     glm::mat4 R(1.0);
+    const float radian = theta * pi / 180.0f;
+    const float cosA = cos(radian);
+    const float sinA = sin(radian);
+
+    switch (i)
+    {
+        //X
+        case 0:
+            R = {
+            { 1.0f, 0.0f, 0.0f, 0.0f },
+            { 0.0f, cosA, -sinA, 0.0f },
+            { 0.0f, sinA, cosA, 0.0f },
+            { 0.0f, 0.0f, 0.0f, 1.0f },
+            };
+            break;
+        //Y
+        case 1:
+            R = {
+            { cosA, 0.0f, sinA, 0.0f },
+            { 0.0f, 1.0f, 0.0f, 0.0f },
+            { -sinA, 0.0f, cosA, 0.0f },
+            { 0.0f, 0.0f, 0.0f, 1.0f },
+            };
+            break;
+        //Z
+        case 2:
+            R = {
+            { cosA, -sinA, 0.0f, 0.0f },
+            { sinA, cosA, 0.0f, 0.0f },
+            { 0.0f, 0.0f, 1.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f, 1.0f },
+            };
+            break;
+        default:
+        break;
+    }
+
     return R;
 }
 
@@ -32,6 +69,14 @@ glm::mat4 Rotate(const int i, const float theta)
 glm::mat4 Scale(const float x, const float y, const float z)
 {
     glm::mat4 S(1.0);
+
+    S = {
+    { x, 0.0f, 0.0f, 0.0f },
+    { 0.0f, y, 0.0f, 0.0f },
+    { 0.0f, 0.0f, z, 0.0f },
+    { 0.0f, 0.0f, 0.0f, 1.0f },
+    };
+
     return S;
 }
 
@@ -39,6 +84,14 @@ glm::mat4 Scale(const float x, const float y, const float z)
 glm::mat4 Translate(const float x, const float y, const float z)
 {
     glm::mat4 T(1.0);
+
+    T = {
+    { 1.0f, 0.0f, 0.0f, 0.0f },
+    { 0.0f, 1.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 1.0f, 0.0f },
+    { x, y, z, 1.0f },
+    };
+
     return T;
 }
 
@@ -47,6 +100,15 @@ glm::mat4 Perspective(const float rx, const float ry,
              const float front, const float back)
 {
     glm::mat4 P(1.0);
+    float range = back - front;
+
+    P = {
+    { 1.0f / rx, 0.0f, 0.0f, 0.0f },
+    { 0.0f, 1.0f / ry, 0.0f, 0.0f },
+    { 0.0f, 0.0f, -(back + front) / range, -(2 * front * back) / range },
+    { 0.0f, 0.0f, -1.0f, 0.0f },
+    };
+
     return P;
 }
 
