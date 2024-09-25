@@ -83,12 +83,10 @@ void MouseButton(GLFWwindow* window, int button, int action, int mods)
     {
         leftDown = (action == GLFW_PRESS);
     }
-
     else if (button == GLFW_MOUSE_BUTTON_MIDDLE) 
     {
         middleDown = (action == GLFW_PRESS);  
     }
-
     else if (button == GLFW_MOUSE_BUTTON_RIGHT) 
     {
         rightDown = (action == GLFW_PRESS); 
@@ -122,20 +120,20 @@ void MouseMotion(GLFWwindow* window, double x, double y)
         scene.lightSpin += dx/3.0;
         scene.lightTilt -= dy/3.0; 
     }
-
     else if (leftDown) 
     {
-        scene.tilt += 5.0f;
+        scene.spin += dx / 3.0;
+        scene.tilt -= dy / 3.0;
     }
 
     if (middleDown) 
     {
-        std::cout << "middle down" << std::endl;;
+        std::cout << "middle down" << std::endl;
     }
 
     if (rightDown)
     {
-        scene.tilt -= 5.0f;
+        
     }
 
     // Record this position
@@ -160,11 +158,17 @@ void Scroll(GLFWwindow* window, double x, double y)
         scene.lightDist = pow(scene.lightDist, 1.02f); }
 
         
-    else if (y>0.0) {
+    else if (y>0.0)
+    {
+        
     }
 
-    else if (y<0.0) {
+    else if (y<0.0)
+    {
+
     }
+
+    scene.zoom -= y;
 }
 
 void InitInteraction()
