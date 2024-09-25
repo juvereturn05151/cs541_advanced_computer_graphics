@@ -41,6 +41,10 @@ public:
     GLFWwindow* window;
 
     // @@ Declare interactive viewing variables here. (spin, tilt, ry, front back, ...)
+    float spin, tilt;
+    float tx, ty, zoom;
+    float rx, ry;
+    float front, back;
 
     // Light parameters
     float lightSpin, lightTilt, lightDist;

@@ -131,7 +131,15 @@ void Scene::InitializeScene()
     CHECKERROR;
 
     // @@ Initialize interactive viewing variables here. (spin, tilt, ry, front back, ...)
-    
+    spin = 0.0f;
+    tilt = 160.0f;
+    tx = 0.0f;
+    ty = 0.0f;
+    zoom = 25.0f;
+    ry = 0.4f;
+    front = 0.5f;
+    back = 5000.0f;
+
     // Set initial light parameters
     lightSpin = 150.0;
     lightTilt = -45.0;
@@ -245,9 +253,11 @@ void Scene::InitializeScene()
         anim->add(spheres, Translate(0.0, 0.0, 0.0)*Scale(16, 16, 16));
     
     // Room contains two framed pictures
-    if (fullPolyCount) {
+    if (fullPolyCount) 
+    {
         room->add(leftFrame, Translate(-1.5, 9.85, 1.)*Scale(0.8, 0.8, 0.8));
-        room->add(rightFrame, Translate( 1.5, 9.85, 1.)*Scale(0.8, 0.8, 0.8)); }
+        room->add(rightFrame, Translate( 1.5, 9.85, 1.)*Scale(0.8, 0.8, 0.8));
+    }
 
     CHECKERROR;
 
@@ -288,32 +298,14 @@ void Scene::DrawMenu()
 
 void Scene::BuildTransforms()
 {
-    
+    rx = ry * (width / height);
 
-    // @@ When you are ready to try interactive viewing, replace the
-    // following hard coded values for WorldProj and WorldView with
-    // transformation matrices calculated from variables such as spin,
-    // tilt, tr, ry, front, and back.
-    WorldProj[0][0]=  2.368;
-    WorldProj[1][0]= -0.800;
-    WorldProj[2][0]=  0.000;
-    WorldProj[3][0]=  0.000;
-    WorldProj[0][1]=  0.384;
-    WorldProj[1][1]=  1.136;
-    WorldProj[2][1]=  2.194;
-    WorldProj[3][1]=  0.000;
-    WorldProj[0][2]=  0.281;
-    WorldProj[1][2]=  0.831;
-    WorldProj[2][2]= -0.480;
-    WorldProj[3][2]= 42.451;
-    WorldProj[0][3]=  0.281;
-    WorldProj[1][3]=  0.831;
-    WorldProj[2][3]= -0.480;
-    WorldProj[3][3]= 43.442;
+    WorldView = Translate(tx, ty, -zoom) * Rotate(0, tilt - 90.0f) * Rotate(2, spin);
+    WorldProj = Perspective(rx, ry, front, back);
     
-    WorldView[3][0]= 0.0;
+    /*WorldView[3][0] = 0.0;
     WorldView[3][1]= 0.0;
-    WorldView[3][2]= 0.0;
+    WorldView[3][2]= 0.0;*/
 
     // @@ Print the two matrices (in column-major order) for
     // comparison with the project document.
@@ -339,8 +331,11 @@ void Scene::DrawScene()
 
     // Update position of any continuously animating objects
     double atime = 360.0*glfwGetTime()/36;
-    for (std::vector<Object*>::iterator m=animated.begin();  m<animated.end();  m++)
+    for (std::vector<Object*>::iterator m = animated.begin(); m < animated.end(); m++) 
+    {
         (*m)->animTr = Rotate(2, atime);
+    }
+        
 
     BuildTransforms();
 

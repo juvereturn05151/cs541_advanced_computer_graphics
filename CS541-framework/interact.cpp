@@ -6,6 +6,7 @@
 //
 
 #include "framework.h"
+#include <iostream>
 
 extern Scene scene;       // Declared in framework.cpp, but used here.
 
@@ -78,14 +79,20 @@ void MouseButton(GLFWwindow* window, int button, int action, int mods)
     // @@ Catch any mouse button UP-or-DOWN-transitions you want here.
     // Record any change of state in variables in the scene object.
     
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-        leftDown = (action == GLFW_PRESS); }
+    if (button == GLFW_MOUSE_BUTTON_LEFT) 
+    {
+        leftDown = (action == GLFW_PRESS);
+    }
 
-    else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
-        middleDown = (action == GLFW_PRESS);  }
+    else if (button == GLFW_MOUSE_BUTTON_MIDDLE) 
+    {
+        middleDown = (action == GLFW_PRESS);  
+    }
 
-    else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-        rightDown = (action == GLFW_PRESS); }
+    else if (button == GLFW_MOUSE_BUTTON_RIGHT) 
+    {
+        rightDown = (action == GLFW_PRESS); 
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -110,16 +117,25 @@ void MouseMotion(GLFWwindow* window, double x, double y)
     int dy = y-mouseY;
 
     // @@ Please don't disable this shifted-left-button code. 
-    if (leftDown && shifted) {  // Rotate light position
+    if (leftDown && shifted) 
+    {  // Rotate light position
         scene.lightSpin += dx/3.0;
-        scene.lightTilt -= dy/3.0; }
-
-    else if (leftDown) {
+        scene.lightTilt -= dy/3.0; 
     }
 
-    if (middleDown) { }
+    else if (leftDown) 
+    {
+        scene.tilt += 5.0f;
+    }
 
-    if (rightDown) {
+    if (middleDown) 
+    {
+        std::cout << "middle down" << std::endl;;
+    }
+
+    if (rightDown)
+    {
+        scene.tilt -= 5.0f;
     }
 
     // Record this position

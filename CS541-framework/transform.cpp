@@ -105,7 +105,7 @@ glm::mat4 Perspective(const float rx, const float ry,
     P = {
     { 1.0f / rx, 0.0f, 0.0f, 0.0f },
     { 0.0f, 1.0f / ry, 0.0f, 0.0f },
-    { 0.0f, 0.0f, -(back + front) / range, -(2 * front * back) / range },
+    { 0.0f, 0.0f, -(back + front) / range, -(2 * back * front) / range },
     { 0.0f, 0.0f, -1.0f, 0.0f },
     };
 
