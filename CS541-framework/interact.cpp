@@ -133,7 +133,8 @@ void MouseMotion(GLFWwindow* window, double x, double y)
 
     if (rightDown)
     {
-        
+        scene.tx += dx / 10.0;
+        scene.ty -= dy / 10.0;
     }
 
     // Record this position
