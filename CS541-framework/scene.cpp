@@ -132,13 +132,17 @@ void Scene::InitializeScene()
 
     // @@ Initialize interactive viewing variables here. (spin, tilt, ry, front back, ...)
     spin = 0.0f;
-    tilt = 160.0f;
+    tilt = 30.0f;
     tx = 0.0f;
     ty = 0.0f;
     zoom = 25.0f;
     ry = 0.4f;
     front = 0.5f;
     back = 5000.0f;
+
+    eye = glm::vec3(0.f, -20.f, 0.f);
+    speed = 10.0f;
+    lastTime = 0.0;
 
     // Set initial light parameters
     lightSpin = 150.0;
@@ -298,14 +302,21 @@ void Scene::DrawMenu()
 
 void Scene::BuildTransforms()
 {
-    rx = ry * (width / height);
+    if (height >= 0) 
+    {
+        rx = ry * (width / height);
+    }
 
-    WorldView = Translate(tx, ty, -zoom) * Rotate(0, tilt - 90.0f) * Rotate(2, spin);
-    WorldProj = Perspective(rx, ry, front, back);
+    if (transformation_mode == false)
+    {
+        WorldView = Translate(tx, ty, -zoom) * Rotate(0, tilt - 90.0f)  * Rotate(2, spin);
+    }
+    else 
+    {
+        WorldView = Rotate(0, tilt - 90.0f) * Rotate(2, spin) * Translate(-eye.x, -eye.y, -(eye.z + 2.0f));
+    }
     
-    /*WorldView[3][0] = 0.0;
-    WorldView[3][1]= 0.0;
-    WorldView[3][2]= 0.0;*/
+    WorldProj = Perspective(rx, ry, front, back);
 
     // @@ Print the two matrices (in column-major order) for
     // comparison with the project document.
@@ -335,14 +346,15 @@ void Scene::DrawScene()
     {
         (*m)->animTr = Rotate(2, atime);
     }
-        
+    
+    UpdateTime();
 
     BuildTransforms();
 
     // The lighting algorithm needs the inverse of the WorldView matrix
     WorldInverse = glm::inverse(WorldView);
     
-
+    HandleMovement();
     ////////////////////////////////////////////////////////////////////////////////
     // Anatomy of a pass:
     //   Choose a shader  (create the shader in InitializeScene above)
@@ -400,4 +412,42 @@ void Scene::DrawScene()
     ////////////////////////////////////////////////////////////////////////////////
     // End of Lighting pass
     ////////////////////////////////////////////////////////////////////////////////
+}
+
+void Scene::UpdateTime() 
+{
+    double currentTime = glfwGetTime();
+    double time_since_last_refresh = currentTime - lastTime;
+    lastTime = currentTime;
+
+    deltaTime = speed * static_cast<float>(time_since_last_refresh);
+}
+
+void Scene::HandleMovement()
+{
+    float spin_radian = spin * rad;
+
+    if (w_down)
+    {
+        eye += deltaTime * glm::vec3(sin(spin_radian), cos(spin_radian), 0.0f);
+    }
+
+    if (s_down)
+    {
+        eye -= deltaTime * glm::vec3(sin(spin_radian), cos(spin_radian), 0.0f);
+    }
+
+    if (d_down)
+    {
+        eye += deltaTime * glm::vec3(cos(spin_radian), -sin(spin_radian), 0.0f);
+    }
+
+    if (a_down)
+    {
+        eye -= deltaTime * glm::vec3(cos(spin_radian), -sin(spin_radian), 0.0f);
+    }
+
+    float groundHeight = proceduralground->HeightAt(eye.x, eye.y);
+    eye.z = groundHeight;
+
 }

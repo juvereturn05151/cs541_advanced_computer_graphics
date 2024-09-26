@@ -11,6 +11,8 @@
 extern Scene scene;       // Declared in framework.cpp, but used here.
 
 // Some globals used for mouse handling.
+const float PI = 3.14159f;
+const float rad = PI / 180.0f;
 double mouseX, mouseY;
 bool shifted = false;
 bool leftDown = false;
@@ -45,20 +47,43 @@ void Keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
     // @@ Catch any key DOWN-transition you'd like in the following
     // switch statement.  Record any change of state in variables in
     // the scene object.
+    if (key == GLFW_KEY_W)
+    {
+        scene.w_down = (action == GLFW_PRESS);
+    }
+    else if (key == GLFW_KEY_S)
+    {
+        scene.s_down = (action == GLFW_PRESS);
+    }
+    else if (key == GLFW_KEY_A)
+    {
+        scene.a_down = (action == GLFW_PRESS);
+    }
+    else if (key == GLFW_KEY_D)
+    {
+        scene.d_down = (action == GLFW_PRESS);
+    }
 
     if  (action == GLFW_PRESS) {
-        switch(key) {
 
+
+
+        switch(key) {
 
         case GLFW_KEY_0: case GLFW_KEY_1: case GLFW_KEY_2: case GLFW_KEY_3: case GLFW_KEY_4:
         case GLFW_KEY_5: case GLFW_KEY_6: case GLFW_KEY_7: case GLFW_KEY_8: case GLFW_KEY_9:
             scene.mode = key-GLFW_KEY_0;
             break;
         case GLFW_KEY_ESCAPE: case GLFW_KEY_Q: // Escape and 'q' keys quit the application
-            exit(0); } }
+            exit(0); } 
+    }
         
     else if (action == GLFW_RELEASE) {
 
+        if (key == GLFW_KEY_TAB)
+        {
+            scene.transformation_mode = !scene.transformation_mode;
+        }
     }
     
     // @@ Catch any key UP-transitions you want here.  Record any

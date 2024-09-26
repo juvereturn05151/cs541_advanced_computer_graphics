@@ -35,25 +35,25 @@ glm::mat4 Rotate(const int i, const float theta)
         case 0:
             R = {
             { 1.0f, 0.0f, 0.0f, 0.0f },
-            { 0.0f, cosA, -sinA, 0.0f },
-            { 0.0f, sinA, cosA, 0.0f },
+            { 0.0f, cosA, sinA, 0.0f },
+            { 0.0f, -sinA, cosA, 0.0f },
             { 0.0f, 0.0f, 0.0f, 1.0f },
             };
             break;
         //Y
         case 1:
             R = {
-            { cosA, 0.0f, sinA, 0.0f },
+            { cosA, 0.0f, -sinA, 0.0f },
             { 0.0f, 1.0f, 0.0f, 0.0f },
-            { -sinA, 0.0f, cosA, 0.0f },
+            { sinA, 0.0f, cosA, 0.0f },
             { 0.0f, 0.0f, 0.0f, 1.0f },
             };
             break;
         //Z
         case 2:
             R = {
-            { cosA, -sinA, 0.0f, 0.0f },
-            { sinA, cosA, 0.0f, 0.0f },
+            { cosA, sinA, 0.0f, 0.0f },
+            { -sinA, cosA, 0.0f, 0.0f },
             { 0.0f, 0.0f, 1.0f, 0.0f },
             { 0.0f, 0.0f, 0.0f, 1.0f },
             };
