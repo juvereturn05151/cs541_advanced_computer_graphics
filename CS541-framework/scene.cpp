@@ -304,7 +304,7 @@ void Scene::BuildTransforms()
 {
     if (height >= 0) 
     {
-        rx = ry * (width / height);
+        rx = ry * (static_cast<float>(width) / static_cast<float>(height));
     }
 
     if (transformation_mode == false)
