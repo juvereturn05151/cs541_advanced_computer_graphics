@@ -396,6 +396,12 @@ void Scene::DrawScene()
     glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(WorldInverse));
     loc = glGetUniformLocation(programId, "lightPos");
     glUniform3fv(loc, 1, &(lightPos[0]));   
+    loc = glGetUniformLocation(programId, "eye");
+    glUniform3fv(loc, 1, &(eye[0]));
+    loc = glGetUniformLocation(programId, "lightIntensity");
+    glUniform3fv(loc, 1, &(lightIntensity[0]));
+    loc = glGetUniformLocation(programId, "ambientLight");
+    glUniform3fv(loc, 1, &(ambientLight[0]));
     loc = glGetUniformLocation(programId, "mode");
     glUniform1i(loc, mode);
     CHECKERROR;

@@ -12,8 +12,11 @@ in vec3 vertexNormal;
 in vec2 vertexTexture;
 in vec3 vertexTangent;
 
-out vec3 normalVec, lightVec;
-out vec2 texCoord;
+out vec3 fragPos;   
+out vec3 normalVec;
+out vec3 lightVec; 
+out vec2 texCoord; 
+
 uniform vec3 lightPos;
 
 void main()

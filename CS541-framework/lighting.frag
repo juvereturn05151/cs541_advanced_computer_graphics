@@ -19,11 +19,18 @@ const int     teapotId	= 9;
 const int     spheresId	= 10;
 const int     floorId	= 11;
 
-in vec3 normalVec, lightVec;
-in vec2 texCoord;
+in vec3 normalVec;  
+in vec3 lightVec;   
+in vec3 fragPos; 
+in vec2 texCoord;  
 
 uniform int objectId;
 uniform vec3 diffuse;
+uniform vec3 specular;
+uniform float shininess;
+uniform vec3 eye;
+uniform vec3 ambientLight; 
+uniform vec3 lightIntensity;
 
 void main()
 {
