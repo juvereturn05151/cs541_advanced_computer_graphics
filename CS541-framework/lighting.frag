@@ -21,7 +21,7 @@ const int     floorId	= 11;
 
 in vec3 normalVec;  
 in vec3 lightVec;   
-in vec3 fragPos; 
+in vec3 worldPos; 
 in vec2 texCoord;  
 
 uniform int objectId;
@@ -40,6 +40,7 @@ void main()
     vec3 Kd = diffuse;   
 
     // A checkerboard pattern to break up large flat expanses.  Remove when using textures.
+
     if (objectId==groundId || objectId==floorId || objectId==seaId)
     {
         ivec2 uv = ivec2(floor(100.0*texCoord));

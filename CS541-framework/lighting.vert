@@ -12,7 +12,7 @@ in vec3 vertexNormal;
 in vec2 vertexTexture;
 in vec3 vertexTangent;
 
-out vec3 fragPos;   
+out vec3 worldPos;   
 out vec3 normalVec;
 out vec3 lightVec; 
 out vec2 texCoord; 
@@ -23,9 +23,10 @@ void main()
 {      
     gl_Position = WorldProj*WorldView*ModelTr*vertex;
     
-    vec3 worldPos = (ModelTr*vertex).xyz;
+    worldPos = (ModelTr*vertex).xyz;
 
     normalVec = vertexNormal*mat3(NormalTr); 
+
     lightVec = lightPos - worldPos;
 
     texCoord = vertexTexture; 
