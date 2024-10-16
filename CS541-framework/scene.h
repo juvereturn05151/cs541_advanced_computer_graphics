@@ -67,6 +67,10 @@ public:
     // Transformations
     glm::mat4 WorldProj, WorldView, WorldInverse;
 
+    // Light
+    glm::vec3 ambientLight = glm::vec3(0.2, 0.2, 0.2);
+    glm::vec3 lightIntensity = glm::vec3(3.0, 3.0, 3.0);
+
     // All objects in the scene are children of this single root object.
     Object* objectRoot;
     Object *central, *anim, *room, *floor, *teapot, *podium, *sky,

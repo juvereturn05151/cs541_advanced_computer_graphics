@@ -33,10 +33,12 @@ void main()
     vec3 Kd = diffuse;   
 
     // A checkerboard pattern to break up large flat expanses.  Remove when using textures.
-    if (objectId==groundId || objectId==floorId || objectId==seaId) {
+    if (objectId==groundId || objectId==floorId || objectId==seaId)
+    {
         ivec2 uv = ivec2(floor(100.0*texCoord));
         if ((uv[0]+uv[1])%2==0)
-            Kd *= 0.9; }
+            Kd *= 0.9; 
+    }
     
     FragColor.xyz = vec3(0.5,0.5,0.5)*Kd + Kd*max(dot(L,N),0.0);
 }
