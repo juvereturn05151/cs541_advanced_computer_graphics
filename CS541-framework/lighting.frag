@@ -23,12 +23,13 @@ in vec3 normalVec;   // fragNormal
 in vec3 lightVec;   
 in vec3 worldPos;   // fragPos
 in vec2 texCoord;  
+in vec3 eyePos;
 
 uniform int objectId;
 uniform vec3 diffuse;
 uniform vec3 specular;
 uniform float shininess;
-uniform vec3 eye; //viewPos
+//uniform vec3 eye; //viewPos
 uniform vec3 ambientLight; 
 uniform vec3 lightIntensity;
 
@@ -44,10 +45,10 @@ float getG(float LdotH)
     return 1.0f / LH_pow_2;
 }
 
-float getD(vec3 N, vec3 H, float roughness) 
+float getD(vec3 N, vec3 H, float shininess) 
 {
-    float first_part =  (roughness + 2.0) /(2.0 / 3.14159);
-    float second_part = pow(max(dot(N, H), 0.0) , roughness); 
+    float first_part =  (shininess + 2.0) /(2.0 * 3.14159);
+    float second_part = pow(max(dot(N, H), 0.0) , shininess); 
     return first_part * second_part;
 }
 
@@ -55,7 +56,7 @@ void main()
 {
     vec3 N = normalize(normalVec);
     vec3 L = normalize(lightVec - worldPos);
-    vec3 V = normalize(eye - worldPos);   
+    vec3 V = normalize(eyePos - worldPos);   
     vec3 H = normalize(L + V);
 
     vec3 Kd = diffuse;   
@@ -90,5 +91,5 @@ void main()
 
     vec3 finalColor = scene_ambient + IiNdotL * BRDF;
     
-    FragColor = vec4(finalColor, 1.0);
+    FragColor.xyz = finalColor;
 }

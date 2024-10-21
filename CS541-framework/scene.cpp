@@ -195,7 +195,7 @@ void Scene::InitializeScene()
     glm::vec3 waterColor(0.3, 0.3, 1.0);
 
     glm::vec3 black(0.0, 0.0, 0.0);
-    glm::vec3 brightSpec(0.5, 0.5, 0.5);
+    glm::vec3 brightSpec(0.03, 0.03, 0.03);
     glm::vec3 polishedSpec(0.3, 0.3, 0.3);
  
     // Creates all the models from which the scene is composed.  Each
@@ -396,8 +396,8 @@ void Scene::DrawScene()
     glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(WorldInverse));
     loc = glGetUniformLocation(programId, "lightPos");
     glUniform3fv(loc, 1, &(lightPos[0]));   
-    loc = glGetUniformLocation(programId, "eye");
-    glUniform3fv(loc, 1, &(eye[0]));
+    //loc = glGetUniformLocation(programId, "eye");
+    //glUniform3fv(loc, 1, &(eye[0]));
     loc = glGetUniformLocation(programId, "lightIntensity");
     glUniform3fv(loc, 1, &(lightIntensity[0]));
     loc = glGetUniformLocation(programId, "ambientLight");

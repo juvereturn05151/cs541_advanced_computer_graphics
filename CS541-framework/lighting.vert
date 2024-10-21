@@ -16,6 +16,7 @@ out vec3 worldPos;
 out vec3 normalVec;
 out vec3 lightVec; 
 out vec2 texCoord; 
+out vec3 eyePos;
 
 uniform vec3 lightPos;
 
@@ -28,6 +29,8 @@ void main()
     normalVec = vertexNormal*mat3(NormalTr); 
 
     lightVec = lightPos - worldPos;
+
+    eyePos = (WorldInverse * vec4(0,0,0,1)).xyz;
 
     texCoord = vertexTexture; 
 }
