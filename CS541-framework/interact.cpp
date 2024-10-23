@@ -173,28 +173,40 @@ void Scroll(GLFWwindow* window, double x, double y)
     if (ImGui::GetIO().WantCaptureMouse)  return;
 
     printf("Scroll %f %f\n", x, y);
-    
+    printf("shifted %i \n", shifted);
     // Figure out the mouse action, and handle accordingly
     // @@ Please don't disable this shifted-scroll-wheel code. 
-    if (y>0.0 && shifted) { // Scroll light in
-        scene.lightDist = pow(scene.lightDist, 1.0f/1.02f); }
 
-    // @@ Please don't disable this shifted-scroll-wheel code. 
-    else if (y<0.0 && shifted) { // Scroll light out
-        scene.lightDist = pow(scene.lightDist, 1.02f); }
-
-        
-    else if (y>0.0)
+    if (shifted) 
     {
-        
-    }
+        if (y > 0.0 && shifted)
+        { // Scroll light in
+            scene.lightDist = pow(scene.lightDist, 1.0f / 1.02f);
+            printf("scene.lightDist %f \n", scene.lightDist);
+        }
 
-    else if (y<0.0)
+        // @@ Please don't disable this shifted-scroll-wheel code. 
+        else if (y < 0.0 && shifted)
+        { // Scroll light out
+            scene.lightDist = pow(scene.lightDist, 1.02f);
+            printf("scene.lightDist %f \n", scene.lightDist);
+        }
+
+
+        else if (y > 0.0)
+        {
+
+        }
+
+        else if (y < 0.0)
+        {
+
+        }
+    }
+    else 
     {
-
+        scene.zoom -= y;
     }
-
-    scene.zoom -= y;
 }
 
 void InitInteraction()

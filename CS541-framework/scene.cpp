@@ -340,6 +340,8 @@ void Scene::DrawScene()
                          lightDist*sin(lightSpin*rad)*sin(lightTilt*rad), 
                          lightDist*cos(lightTilt*rad));
 
+    printf("lightPos: %f %f %f\n", lightPos.x, lightPos.y, lightPos.z);
+
     // Update position of any continuously animating objects
     double atime = 360.0*glfwGetTime()/36;
     for (std::vector<Object*>::iterator m = animated.begin(); m < animated.end(); m++) 
