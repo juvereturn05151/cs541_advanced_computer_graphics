@@ -194,9 +194,9 @@ void Scene::InitializeScene()
     glm::vec3 grassColor(62.0/255.0, 102.0/255.0, 38.0/255.0);
     glm::vec3 waterColor(0.3, 0.3, 1.0);
 
-    glm::vec3 black(0.0, 0.0, 0.0);
-    glm::vec3 brightSpec(0.03, 0.03, 0.03);
-    glm::vec3 polishedSpec(0.3, 0.3, 0.3);
+    glm::vec3 black(0.0);
+    glm::vec3 brightSpec(0.01);
+    glm::vec3 polishedSpec(0.03);
  
     // Creates all the models from which the scene is composed.  Each
     // is created with a polygon shape (possibly NULL), a
