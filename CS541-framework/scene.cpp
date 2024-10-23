@@ -212,13 +212,13 @@ void Scene::InitializeScene()
     
     central    = new Object(NULL, nullId);
     anim       = new Object(NULL, nullId);
-    room       = new Object(RoomPolygons, roomId, brickColor, black, 1);
-    floor      = new Object(FloorPolygons, floorId, floorColor, black, 1);
-    teapot     = new Object(TeapotPolygons, teapotId, brassColor, brightSpec, 120);
+    room       = new Object(RoomPolygons, roomId, brickColor, black, 3);
+    floor      = new Object(FloorPolygons, floorId, floorColor, black, 3);
+    teapot     = new Object(TeapotPolygons, teapotId, brassColor, brightSpec, 100);
     podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10); 
-    sky        = new Object(SpherePolygons, skyId, black, black, 0);
-    ground     = new Object(GroundPolygons, groundId, grassColor, black, 1);
-    sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 120);
+    sky        = new Object(SpherePolygons, skyId, black, black, 2);
+    ground     = new Object(GroundPolygons, groundId, grassColor, black, 3);
+    sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100);
     leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons);
     rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons); 
     spheres    = SphereOfSpheres(SpherePolygons);
