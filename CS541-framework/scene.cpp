@@ -150,6 +150,7 @@ void Scene::InitializeScene()
     lightDist = 100.0;
     // @@ Perhaps initialize additional scene lighting values here. (lightVal, lightAmb)
     
+    Texture* floorTexture = new Texture("textures/6670-diffuse.jpg");
 
     CHECKERROR;
     objectRoot = new Object(NULL, nullId);

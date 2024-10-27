@@ -29,9 +29,9 @@ uniform int objectId;
 uniform vec3 diffuse;
 uniform vec3 specular;
 uniform float shininess;
-//uniform vec3 eye; //viewPos
 uniform vec3 ambientLight; 
 uniform vec3 lightIntensity;
+uniform sampler2D tex;
 
 vec3 getF(float LdotH, vec3 Ks) 
 {
@@ -61,6 +61,14 @@ void main()
 
     vec3 Kd = diffuse;   
     vec3 Ks = specular;  
+
+    // Sample the texture
+    vec3 texColor = texture(tex, texCoord).rgb;
+
+    // Use texture color if texture is present (use a small epsilon to check)
+    if (length(texColor) > 0.001) {
+        Kd *= texColor;  // Modulate the diffuse color with the texture color
+    }
 
     float NdotL = max(dot(N, L), 0.0);
     float NdotV = max(dot(N, V), 0.0);
