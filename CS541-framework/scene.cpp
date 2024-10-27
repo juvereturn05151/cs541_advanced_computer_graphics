@@ -214,7 +214,7 @@ void Scene::InitializeScene()
     central    = new Object(NULL, nullId);
     anim       = new Object(NULL, nullId);
     room       = new Object(RoomPolygons, roomId, brickColor, black, 3);
-    floor      = new Object(FloorPolygons, floorId, floorColor, black, 3);
+    floor      = new Object(FloorPolygons, floorId, floorColor, black, 3, floorTexture);
     teapot     = new Object(TeapotPolygons, teapotId, brassColor, brightSpec, 100);
     podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10); 
     sky        = new Object(SpherePolygons, skyId, black, black, 2);

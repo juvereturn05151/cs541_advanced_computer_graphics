@@ -91,6 +91,10 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
             shape->DrawVAO();
     CHECKERROR;
 
+    if (texture != nullptr)
+    {
+        texture->UnbindTexture(0);
+    }
 
     CHECKERROR;
     // Recursively draw each sub-objects, each with its own transformation.
