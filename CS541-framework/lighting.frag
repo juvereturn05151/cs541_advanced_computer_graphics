@@ -36,6 +36,8 @@ uniform vec3 lightIntensity;
 uniform sampler2D tex;
 uniform sampler2D normalMap;  
 uniform bool useNormalMap; 
+uniform sampler2D skyDomeTexture;
+uniform bool useSkyReflect; 
 
 vec3 getF(float LdotH, vec3 Ks) 
 {
@@ -54,6 +56,20 @@ float getD(vec3 N, vec3 H, float shininess)
     float first_part =  (shininess + 2.0) /(2.0 * 3.14159);
     float second_part = pow(max(dot(N, H), 0.0) , shininess); 
     return first_part * second_part;
+}
+
+vec3 getSkyReflection(vec3 V, vec3 N)
+{
+    // Calculate reflection vector R
+    vec3 R = -reflect(V, N);
+    
+    // Calculate UV coordinates for the sky dome texture using R
+    float u = -atan(R.y, R.x) / (2.0 * 3.14159);
+    float v = acos(R.z) / 3.14159;
+    vec2 skyUV = vec2(u, v);
+
+    // Sample the sky dome texture at the calculated UV
+    return texture(skyDomeTexture, skyUV).rgb;
 }
 
 void main() {
@@ -109,6 +125,13 @@ void main() {
     vec3 texColor = texture(tex, adjustedTexCoord).rgb;
     if (length(texColor) > 0.001) {
         Kd *= texColor;  // Modulate diffuse color with the texture color if available
+    }
+
+    vec3 skyReflection = vec3(0.0, 0.0, 0.0);
+
+    if(useSkyReflect)
+    {
+        skyReflection = getSkyReflection(V, N);
     }
 
     // Lighting terms
