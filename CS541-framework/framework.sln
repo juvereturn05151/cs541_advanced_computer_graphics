@@ -5,6 +5,14 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "framework.vcxproj", "{1FBA3F3A-3282-A709-2E8A-1DA52B9CF3A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA427DF1-C598-454E-B973-A3BF507DFC6D}"
+	ProjectSection(SolutionItems) = preProject
+		lighting.frag = lighting.frag
+		lighting.vert = lighting.vert
+		object.h = object.h
+		texture.h = texture.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

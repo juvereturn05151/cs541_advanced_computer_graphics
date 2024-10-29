@@ -24,6 +24,7 @@ in vec3 lightVec;
 in vec3 worldPos;   // fragPos
 in vec2 texCoord;  
 in vec3 eyePos;
+in vec3 tanVec;
 
 uniform int objectId;
 uniform vec3 diffuse;
@@ -33,6 +34,8 @@ uniform vec3 ambientLight;
 uniform vec3 lightIntensity;
 
 uniform sampler2D tex;
+uniform sampler2D normalMap;  
+uniform bool useNormalMap; 
 
 vec3 getF(float LdotH, vec3 Ks) 
 {
@@ -53,35 +56,47 @@ float getD(vec3 N, vec3 H, float shininess)
     return first_part * second_part;
 }
 
-void main()
-{
-    vec3 N = normalize(normalVec);
-    vec3 L = normalize(lightVec - worldPos);
-    vec3 V = normalize(eyePos - worldPos);   
-    vec3 H = normalize(L + V);
+void main() {
+    // Transform and normalize vectors
+    vec3 T = normalize(tanVec);             // Tangent vector
+    vec3 N = normalize(normalVec);          // Default normal vector
+    vec3 B = normalize(cross(T, N));        // Bitangent vector
+    mat3 TBN = mat3(T, B, N);               // TBN matrix
 
-    // Check if the current object is the skydome
+    // Calculate the sky reflection if the object is the sky
     if (objectId == skyId) {
-        // Calculate texture coordinates from the view direction for the skydome
-        vec2 skyTexCoord = vec2(-atan(V.y, V.x) / (2.0 * 3.14159265), acos(V.z) / 3.14159265);
-
-        // Sample the sky texture and set it directly as the color output
+        vec2 skyTexCoord = vec2(-atan(normalize(eyePos - worldPos).y, normalize(eyePos - worldPos).x) / (2.0 * 3.14159265),
+                                acos(normalize(eyePos - worldPos).z) / 3.14159265);
         vec3 skyColor = texture(tex, skyTexCoord).rgb;
-        FragColor = vec4(skyColor, 1.0); // Output the sky color with full opacity
+        FragColor = vec4(skyColor, 1.0);  // Output sky color with full opacity
         return;
     }
 
-    vec3 Kd = diffuse;   
-    vec3 Ks = specular;  
+    // Adjust normal vector based on normal map if it exists
+    if (useNormalMap) {
+        // Sample the normal map and convert it from [0,1] to [-1,1]
+        vec3 delta = texture(normalMap, texCoord).xyz;
+        delta = delta * 2.0 - vec3(1.0, 1.0, 1.0);
 
-    // Sample the texture
-    vec3 texColor = texture(tex, texCoord).rgb;
-
-    // Use texture color if texture is present (use a small epsilon to check)
-    if (length(texColor) > 0.001) {
-        Kd *= texColor;  // Modulate the diffuse color with the texture color
+        // Transform the normal map's delta vector to world space
+        N = normalize(TBN * delta);
     }
 
+    // Light and view direction calculations
+    vec3 L = normalize(lightVec - worldPos); // Light vector
+    vec3 V = normalize(eyePos - worldPos);   // View vector
+    vec3 H = normalize(L + V);               // Halfway vector
+
+    vec3 Kd = diffuse;
+    vec3 Ks = specular;
+
+    // Sample the diffuse texture color
+    vec3 texColor = texture(tex, texCoord).rgb;
+    if (length(texColor) > 0.001) {
+        Kd *= texColor;  // Modulate diffuse color with the texture color if available
+    }
+
+    // Lighting terms
     float NdotL = max(dot(N, L), 0.0);
     float NdotV = max(dot(N, V), 0.0);
     float NdotH = max(dot(N, H), 0.0);
@@ -89,27 +104,24 @@ void main()
     float LdotH = max(dot(L, H), 0.0);
 
     vec3 F = getF(LdotH, Ks);
-
     float G = getG(LdotH);
-
     float D = getD(N, H, shininess);
 
     vec3 BRDF_diffuse = (Kd / 3.14159);  
-    vec3 BRDF = BRDF_diffuse +( (F * G * D) / (4.0));
+    vec3 BRDF = BRDF_diffuse + ((F * G * D) / (4.0));
 
-    // A checkerboard pattern to break up large flat expanses.  Remove when using textures.
-
-    if (objectId==groundId || objectId==floorId || objectId==seaId)
-    {
-        ivec2 uv = ivec2(floor(100.0*texCoord));
-        if ((uv[0]+uv[1])%2==0)
-            Kd *= 0.9; 
+    // Checkerboard pattern for ground, floor, and sea (optional)
+    if (objectId == groundId || objectId == floorId || objectId == seaId) {
+        ivec2 uv = ivec2(floor(100.0 * texCoord));
+        if ((uv[0] + uv[1]) % 2 == 0)
+            Kd *= 0.9;
     }
 
+    // Ambient and direct lighting contributions
     vec3 scene_ambient = ambientLight * Kd; 
     vec3 IiNdotL = lightIntensity * NdotL;
 
     vec3 finalColor = scene_ambient + IiNdotL * BRDF;
-    
+
     FragColor.xyz = finalColor;
 }

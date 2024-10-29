@@ -17,6 +17,7 @@ out vec3 normalVec;
 out vec3 lightVec; 
 out vec2 texCoord; 
 out vec3 eyePos;
+out vec3 tanVec;
 
 uniform vec3 lightPos;
 
@@ -31,6 +32,8 @@ void main()
     lightVec = lightPos - worldPos;
 
     eyePos = (WorldInverse * vec4(0,0,0,1)).xyz;
+
+    tanVec = mat3(ModelTr) * vertexTangent;
 
     texCoord = vertexTexture; 
 }

@@ -34,9 +34,11 @@ class Object
     glm::vec3 specularColor;         // Specular color of object
     float shininess;            // Surface roughness value
     Texture* texture;
+    Texture* normalMap;
     std::vector<INSTANCE> instances; // Pairs of sub-objects and transformations 
 
-    Object(Shape* _shape, const int objectId, const glm::vec3 _d=glm::vec3(), const glm::vec3 _s=glm::vec3(), const float _n=1, Texture* _texture = NULL);
+    Object(Shape* _shape, const int objectId, const glm::vec3 _d=glm::vec3(), const glm::vec3 _s=glm::vec3(), 
+        const float _n=1, Texture* _texture = NULL, Texture* _normalMap = NULL);
 
     // If this object is to be drawn with a texture, this is a good
     // place to store the texture id (a small positive integer).  The

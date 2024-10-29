@@ -150,6 +150,7 @@ void Scene::InitializeScene()
     lightDist = 100.0;
     // @@ Perhaps initialize additional scene lighting values here. (lightVal, lightAmb)
     
+    //Textures
     Texture* floorTexture = new Texture("textures/6670-diffuse.jpg");
     Texture* teapotTexture = new Texture("textures/cracks.png");
     Texture* podiumTexture = new Texture("textures/Brazilian_rosewood_pxr128.png");
@@ -158,6 +159,12 @@ void Scene::InitializeScene()
     Texture* skyTexture = new Texture("skys/Tropical_Beach_8k.jpg");
     Texture* leftFrameTexture = new Texture("textures/my-house-01.png");
     Texture* rightFrameTexture = new Texture("textures/juve.jpg");
+
+    //NormalMap
+    Texture* floorNormalMap = new Texture("textures/6670-normal.jpg");
+    Texture* podiumNormalMap = new Texture("textures/Brazilian_rosewood_pxr128_normal.png");
+    Texture* seaNormalMap = new Texture("textures/ripples_normalmap.png");
+    Texture* wallNormalMap = new Texture("textures/Standard_red_pxr128_normal.png");
 
     CHECKERROR;
     objectRoot = new Object(NULL, nullId);
@@ -221,13 +228,13 @@ void Scene::InitializeScene()
     
     central    = new Object(NULL, nullId);
     anim       = new Object(NULL, nullId);
-    room       = new Object(RoomPolygons, roomId, brickColor, white, 3, wallTexture);
-    floor      = new Object(FloorPolygons, floorId, white, white, 3, floorTexture);
+    room       = new Object(RoomPolygons, roomId, brickColor, white, 3, wallTexture, wallNormalMap);
+    floor      = new Object(FloorPolygons, floorId, white, white, 3, floorTexture, floorNormalMap);
     teapot     = new Object(TeapotPolygons, teapotId, white, brightSpec, 100, teapotTexture);
-    podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10, podiumTexture);
+    podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10, podiumTexture, podiumNormalMap);
     sky        = new Object(SpherePolygons, skyId, black, white, 2, skyTexture);
     ground     = new Object(GroundPolygons, groundId, white, white, 3, grassTexture);
-    sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100);
+    sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100, NULL, wallNormalMap);
     leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons, leftFrameTexture);
     rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons, rightFrameTexture);
     spheres    = SphereOfSpheres(SpherePolygons);

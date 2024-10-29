@@ -30,9 +30,9 @@ using namespace gl;
 #define CHECKERROR {GLenum err = glGetError(); if (err != GL_NO_ERROR) { fprintf(stderr, "OpenGL error (at line object.cpp:%d): %s\n", __LINE__, gluErrorString(err)); exit(-1);} }
 
 
-Object::Object(Shape* _shape, const int _objectId, const glm::vec3 _diffuseColor, const glm::vec3 _specularColor, const float _shininess, Texture* _texture)
+Object::Object(Shape* _shape, const int _objectId, const glm::vec3 _diffuseColor, const glm::vec3 _specularColor, const float _shininess, Texture* _texture, Texture* _normalMap)
     : diffuseColor(_diffuseColor), specularColor(_specularColor), shininess(_shininess),
-      shape(_shape), objectId(_objectId), drawMe(true), texture(_texture)
+      shape(_shape), objectId(_objectId), drawMe(true), texture(_texture), normalMap(_normalMap)
      
 {
     
@@ -82,7 +82,14 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     // load the texture into a texture-unit of your choice and inform
     // the shader program of the texture-unit number.  See
     // Texture::Bind for the 4 lines of code to do exactly that.
-    
+    bool hasNormalMap = (normalMap != NULL);
+    loc = glGetUniformLocation(program->programId, "useNormalMap");
+    glUniform1i(loc, hasNormalMap);
+
+    if (normalMap != NULL)
+    {
+        normalMap->BindTexture(1, program->programId, "normalMap");
+    }
 
     // Draw this object
     CHECKERROR;
@@ -94,6 +101,11 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     if (texture != nullptr)
     {
         texture->UnbindTexture(0);
+    }
+    
+    if (normalMap != nullptr)
+    {
+        normalMap->UnbindTexture(0);
     }
 
     CHECKERROR;
