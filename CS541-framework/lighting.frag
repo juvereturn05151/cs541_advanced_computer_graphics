@@ -57,6 +57,21 @@ float getD(vec3 N, vec3 H, float shininess)
 }
 
 void main() {
+    vec2 adjustedTexCoord;
+
+    if(objectId == roomId)
+    {
+        adjustedTexCoord = (texCoord.yx  / 0.01f) -0.1f ;
+    }
+    else if( objectId == groundId)
+    {
+        adjustedTexCoord = (texCoord.xy  / 0.01f) -0.1f ;
+    }
+    else
+    {
+        adjustedTexCoord = texCoord.xy;
+    }
+
     // Transform and normalize vectors
     vec3 T = normalize(tanVec);             // Tangent vector
     vec3 N = normalize(normalVec);          // Default normal vector
@@ -75,7 +90,7 @@ void main() {
     // Adjust normal vector based on normal map if it exists
     if (useNormalMap) {
         // Sample the normal map and convert it from [0,1] to [-1,1]
-        vec3 delta = texture(normalMap, texCoord).xyz;
+        vec3 delta = texture(normalMap, adjustedTexCoord).xyz;
         delta = delta * 2.0 - vec3(1.0, 1.0, 1.0);
 
         // Transform the normal map's delta vector to world space
@@ -91,7 +106,7 @@ void main() {
     vec3 Ks = specular;
 
     // Sample the diffuse texture color
-    vec3 texColor = texture(tex, texCoord).rgb;
+    vec3 texColor = texture(tex, adjustedTexCoord).rgb;
     if (length(texColor) > 0.001) {
         Kd *= texColor;  // Modulate diffuse color with the texture color if available
     }
@@ -112,7 +127,7 @@ void main() {
 
     // Checkerboard pattern for ground, floor, and sea (optional)
     if (objectId == groundId || objectId == floorId || objectId == seaId) {
-        ivec2 uv = ivec2(floor(100.0 * texCoord));
+        ivec2 uv = ivec2(floor(100.0 * adjustedTexCoord));
         if ((uv[0] + uv[1]) % 2 == 0)
             Kd *= 0.9;
     }

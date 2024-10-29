@@ -105,7 +105,7 @@ Object* FramedPicture(const glm::mat4& modelTr, const int objectId,
     
     Object* frame = new Object(NULL, nullId);
     Object* ob;
-    
+    glm::vec3 white(1.0);
     glm::vec3 woodColor(87.0/255.0,51.0/255.0,35.0/255.0);
     ob = new Object(BoxPolygons, frameId,
                     woodColor, glm::vec3(0.2, 0.2, 0.2), 10.0);
@@ -115,7 +115,7 @@ Object* FramedPicture(const glm::mat4& modelTr, const int objectId,
     frame->add(ob, Translate(-1.0-w, 0.0, 0.0)*Scale(w, w, 1.0+2*w));
 
     ob = new Object(QuadPolygons, objectId,
-                    woodColor, glm::vec3(0.0, 0.0, 0.0), 10.0, texture);
+        white, glm::vec3(0.0, 0.0, 0.0), 10.0, texture);
     frame->add(ob, Rotate(0,90));
 
     return frame;
