@@ -77,11 +77,11 @@ void main() {
 
     if(objectId == roomId)
     {
-        adjustedTexCoord = (texCoord.yx  / 0.01f) -0.1f ;
+        adjustedTexCoord = (texCoord.yx  / 0.01f)  ;
     }
-    else if( objectId == groundId)
+    else if( objectId == groundId || objectId == seaId )
     {
-        adjustedTexCoord = (texCoord.xy  / 0.01f) -0.1f ;
+        adjustedTexCoord = (texCoord.xy  / 0.01f)  ;
     }
     else
     {
