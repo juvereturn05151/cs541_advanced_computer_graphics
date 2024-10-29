@@ -31,6 +31,7 @@ uniform vec3 specular;
 uniform float shininess;
 uniform vec3 ambientLight; 
 uniform vec3 lightIntensity;
+
 uniform sampler2D tex;
 
 vec3 getF(float LdotH, vec3 Ks) 
@@ -58,6 +59,17 @@ void main()
     vec3 L = normalize(lightVec - worldPos);
     vec3 V = normalize(eyePos - worldPos);   
     vec3 H = normalize(L + V);
+
+    // Check if the current object is the skydome
+    if (objectId == skyId) {
+        // Calculate texture coordinates from the view direction for the skydome
+        vec2 skyTexCoord = vec2(-atan(V.y, V.x) / (2.0 * 3.14159265), acos(V.z) / 3.14159265);
+
+        // Sample the sky texture and set it directly as the color output
+        vec3 skyColor = texture(tex, skyTexCoord).rgb;
+        FragColor = vec4(skyColor, 1.0); // Output the sky color with full opacity
+        return;
+    }
 
     vec3 Kd = diffuse;   
     vec3 Ks = specular;  

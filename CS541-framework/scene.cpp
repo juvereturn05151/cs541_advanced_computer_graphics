@@ -98,7 +98,7 @@ Object* SphereOfSpheres(Shape* SpherePolygons)
 ////////////////////////////////////////////////////////////////////////
 // Constructs a -1...+1  quad (canvas) framed by four (elongated) boxes
 Object* FramedPicture(const glm::mat4& modelTr, const int objectId, 
-                      Shape* BoxPolygons, Shape* QuadPolygons)
+                      Shape* BoxPolygons, Shape* QuadPolygons, Texture* texture = NULL)
 {
     // This draws the frame as four (elongated) boxes of size +-1.0
     float w = 0.05;             // Width of frame boards.
@@ -115,7 +115,7 @@ Object* FramedPicture(const glm::mat4& modelTr, const int objectId,
     frame->add(ob, Translate(-1.0-w, 0.0, 0.0)*Scale(w, w, 1.0+2*w));
 
     ob = new Object(QuadPolygons, objectId,
-                    woodColor, glm::vec3(0.0, 0.0, 0.0), 10.0);
+                    woodColor, glm::vec3(0.0, 0.0, 0.0), 10.0, texture);
     frame->add(ob, Rotate(0,90));
 
     return frame;
@@ -151,6 +151,13 @@ void Scene::InitializeScene()
     // @@ Perhaps initialize additional scene lighting values here. (lightVal, lightAmb)
     
     Texture* floorTexture = new Texture("textures/6670-diffuse.jpg");
+    Texture* teapotTexture = new Texture("textures/cracks.png");
+    Texture* podiumTexture = new Texture("textures/Brazilian_rosewood_pxr128.png");
+    Texture* grassTexture = new Texture("textures/grass.jpg");
+    Texture* wallTexture = new Texture("textures/Standard_red_pxr128.png");
+    Texture* skyTexture = new Texture("skys/Tropical_Beach_8k.jpg");
+    Texture* leftFrameTexture = new Texture("textures/my-house-01.png");
+    Texture* rightFrameTexture = new Texture("textures/juve.jpg");
 
     CHECKERROR;
     objectRoot = new Object(NULL, nullId);
@@ -190,11 +197,12 @@ void Scene::InitializeScene()
     // Various colors used in the subsequent models
     glm::vec3 woodColor(87.0/255.0, 51.0/255.0, 35.0/255.0);
     glm::vec3 brickColor(134.0/255.0, 60.0/255.0, 56.0/255.0);
-    glm::vec3 floorColor(6*16/255.0, 5.5*16/255.0, 3*16/255.0);
-    glm::vec3 brassColor(0.5, 0.5, 0.1);
+    glm::vec3 floorColor(1, 1, 1);
+    glm::vec3 brassColor(1, 1, 1);
     glm::vec3 grassColor(62.0/255.0, 102.0/255.0, 38.0/255.0);
     glm::vec3 waterColor(0.3, 0.3, 1.0);
 
+    glm::vec3 white(1.0);
     glm::vec3 black(0.0);
     glm::vec3 brightSpec(0.01);
     glm::vec3 polishedSpec(0.03);
@@ -213,15 +221,15 @@ void Scene::InitializeScene()
     
     central    = new Object(NULL, nullId);
     anim       = new Object(NULL, nullId);
-    room       = new Object(RoomPolygons, roomId, brickColor, black, 3);
-    floor      = new Object(FloorPolygons, floorId, floorColor, black, 3, floorTexture);
-    teapot     = new Object(TeapotPolygons, teapotId, brassColor, brightSpec, 100);
-    podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10); 
-    sky        = new Object(SpherePolygons, skyId, black, black, 2);
-    ground     = new Object(GroundPolygons, groundId, grassColor, black, 3);
+    room       = new Object(RoomPolygons, roomId, brickColor, white, 3, wallTexture);
+    floor      = new Object(FloorPolygons, floorId, white, white, 3, floorTexture);
+    teapot     = new Object(TeapotPolygons, teapotId, white, brightSpec, 100, teapotTexture);
+    podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10, podiumTexture);
+    sky        = new Object(SpherePolygons, skyId, black, white, 2, skyTexture);
+    ground     = new Object(GroundPolygons, groundId, white, white, 3, grassTexture);
     sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100);
-    leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons);
-    rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons); 
+    leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons, leftFrameTexture);
+    rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons, rightFrameTexture);
     spheres    = SphereOfSpheres(SpherePolygons);
 #ifdef REFL
     spheres->drawMe = true;
@@ -341,8 +349,6 @@ void Scene::DrawScene()
                          lightDist*sin(lightSpin*rad)*sin(lightTilt*rad), 
                          lightDist*cos(lightTilt*rad));
 
-    printf("lightPos: %f %f %f\n", lightPos.x, lightPos.y, lightPos.z);
-
     // Update position of any continuously animating objects
     double atime = 360.0*glfwGetTime()/36;
     for (std::vector<Object*>::iterator m = animated.begin(); m < animated.end(); m++) 
@@ -399,8 +405,6 @@ void Scene::DrawScene()
     glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(WorldInverse));
     loc = glGetUniformLocation(programId, "lightPos");
     glUniform3fv(loc, 1, &(lightPos[0]));   
-    //loc = glGetUniformLocation(programId, "eye");
-    //glUniform3fv(loc, 1, &(eye[0]));
     loc = glGetUniformLocation(programId, "lightIntensity");
     glUniform3fv(loc, 1, &(lightIntensity[0]));
     loc = glGetUniformLocation(programId, "ambientLight");
