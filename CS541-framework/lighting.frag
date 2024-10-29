@@ -104,13 +104,14 @@ void main() {
     }
 
     // Adjust normal vector based on normal map if it exists
-    if (useNormalMap) {
+    if (useNormalMap) 
+    {
         // Sample the normal map and convert it from [0,1] to [-1,1]
         vec3 delta = texture(normalMap, adjustedTexCoord).xyz;
         delta = delta * 2.0 - vec3(1.0, 1.0, 1.0);
 
         // Transform the normal map's delta vector to world space
-        N = normalize(TBN * delta);
+        N = delta.x * T + delta.y * B + delta.z * N;
     }
 
     // Light and view direction calculations
@@ -123,7 +124,8 @@ void main() {
 
     // Sample the diffuse texture color
     vec3 texColor = texture(tex, adjustedTexCoord).rgb;
-    if (length(texColor) > 0.001) {
+    if (length(texColor) > 0.001) 
+    {
         Kd *= texColor;  // Modulate diffuse color with the texture color if available
     }
 
@@ -161,5 +163,5 @@ void main() {
 
     vec3 finalColor = scene_ambient + IiNdotL * BRDF;
 
-    FragColor.xyz = finalColor;
+    FragColor.xyz = finalColor + skyReflection;
 }

@@ -30,9 +30,9 @@ using namespace gl;
 #define CHECKERROR {GLenum err = glGetError(); if (err != GL_NO_ERROR) { fprintf(stderr, "OpenGL error (at line object.cpp:%d): %s\n", __LINE__, gluErrorString(err)); exit(-1);} }
 
 
-Object::Object(Shape* _shape, const int _objectId, const glm::vec3 _diffuseColor, const glm::vec3 _specularColor, const float _shininess, Texture* _texture, Texture* _normalMap)
+Object::Object(Shape* _shape, const int _objectId, const glm::vec3 _diffuseColor, const glm::vec3 _specularColor, const float _shininess, Texture* _texture, Texture* _normalMap, Texture* _skyDome)
     : diffuseColor(_diffuseColor), specularColor(_specularColor), shininess(_shininess),
-      shape(_shape), objectId(_objectId), drawMe(true), texture(_texture), normalMap(_normalMap)
+      shape(_shape), objectId(_objectId), drawMe(true), texture(_texture), normalMap(_normalMap), skyDome(_skyDome)
      
 {
     
@@ -91,6 +91,15 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
         normalMap->BindTexture(1, program->programId, "normalMap");
     }
 
+    bool hasSkyDome = (skyDome != NULL);
+    loc = glGetUniformLocation(program->programId, "useSkyReflect");
+    glUniform1i(loc, hasSkyDome);
+
+    if (skyDome != NULL) 
+    {
+        skyDome->BindTexture(2, program->programId, "skyDomeTexture");
+    }
+
     // Draw this object
     CHECKERROR;
     if (shape)
@@ -106,6 +115,11 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     if (normalMap != nullptr)
     {
         normalMap->UnbindTexture(0);
+    }
+
+    if (skyDome != nullptr)
+    {
+        skyDome->UnbindTexture(0);
     }
 
     CHECKERROR;

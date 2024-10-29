@@ -234,7 +234,7 @@ void Scene::InitializeScene()
     podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10, podiumTexture, podiumNormalMap);
     sky        = new Object(SpherePolygons, skyId, black, white, 2, skyTexture);
     ground     = new Object(GroundPolygons, groundId, white, white, 3, grassTexture);
-    sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100, NULL, wallNormalMap);
+    sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100, NULL, seaNormalMap, skyTexture);
     leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons, leftFrameTexture);
     rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons, rightFrameTexture);
     spheres    = SphereOfSpheres(SpherePolygons);
