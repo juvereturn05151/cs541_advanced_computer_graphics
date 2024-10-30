@@ -61,7 +61,7 @@ float getD(vec3 N, vec3 H, float shininess)
 vec3 getSkyReflection(vec3 V, vec3 N)
 {
     // Calculate reflection vector R
-    vec3 R = -reflect(V, N);
+    vec3 R = reflect(V, N);
     
     // Calculate UV coordinates for the sky dome texture using R
     float u = -atan(R.y, R.x) / (2.0 * 3.14159);
@@ -95,7 +95,8 @@ void main() {
     mat3 TBN = mat3(T, B, N);               // TBN matrix
 
     // Calculate the sky reflection if the object is the sky
-    if (objectId == skyId) {
+    if (objectId == skyId) 
+    {
         vec2 skyTexCoord = vec2(-atan(normalize(eyePos - worldPos).y, normalize(eyePos - worldPos).x) / (2.0 * 3.14159265),
                                 acos(normalize(eyePos - worldPos).z) / 3.14159265);
         vec3 skyColor = texture(tex, skyTexCoord).rgb;
@@ -126,7 +127,7 @@ void main() {
     vec3 texColor = texture(tex, adjustedTexCoord).rgb;
     if (length(texColor) > 0.001) 
     {
-        Kd *= texColor;  // Modulate diffuse color with the texture color if available
+        Kd = texColor;  // Modulate diffuse color with the texture color if available
     }
 
     vec3 skyReflection = vec3(0.0, 0.0, 0.0);
