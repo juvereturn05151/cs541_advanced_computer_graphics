@@ -33,9 +33,11 @@ Texture::Texture(const std::string &path) : textureId(0)
     stbi_set_flip_vertically_on_load(true);
     image = stbi_load(path.c_str(), &width, &height, &depth, 4);
     printf("%d %d %d %s\n", depth, width, height, path.c_str());
-    if (!image) {
+    if (!image) 
+    {
         printf("\nRead error on file %s:\n  %s\n\n", path.c_str(), stbi_failure_reason());
-        exit(-1); }
+        exit(-1); 
+    }
 
     glGenTextures(1, &textureId);   // Get an integer id for this texture from OpenGL
     glBindTexture(GL_TEXTURE_2D, textureId);

@@ -77,11 +77,15 @@ void main() {
 
     if(objectId == roomId)
     {
-        adjustedTexCoord = (texCoord.yx  / 0.01f)  ;
+        adjustedTexCoord = (texCoord.yx  / 0.05f)  ;
     }
     else if( objectId == groundId || objectId == seaId )
     {
         adjustedTexCoord = (texCoord.xy  / 0.01f)  ;
+    }
+    else if( objectId == lPicId)
+    {
+        adjustedTexCoord = (texCoord.xy  - 0.1) / 0.8;
     }
     else
     {
@@ -130,6 +134,15 @@ void main() {
         Kd = texColor;  // Modulate diffuse color with the texture color if available
     }
 
+    if(objectId == lPicId)
+    {
+        if(adjustedTexCoord.x >= 0.98f ||adjustedTexCoord.y >= 0.98f 
+         || adjustedTexCoord.x <= 0.02f || adjustedTexCoord.y <= 0.02f)
+        {
+            Kd = vec3(0.5f, 0.5f, 0.5f);
+        }
+    }
+
     vec3 skyReflection = vec3(0.0, 0.0, 0.0);
 
     if(useSkyReflect)
@@ -152,7 +165,8 @@ void main() {
     vec3 BRDF = BRDF_diffuse + ((F * G * D) / (4.0));
 
     // Checkerboard pattern for ground, floor, and sea (optional)
-    if (objectId == groundId || objectId == floorId || objectId == seaId) {
+    if (objectId == groundId || objectId == floorId || objectId == seaId) 
+    {
         ivec2 uv = ivec2(floor(100.0 * adjustedTexCoord));
         if ((uv[0] + uv[1]) % 2 == 0)
             Kd *= 0.9;
