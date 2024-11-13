@@ -1,28 +1,28 @@
 /////////////////////////////////////////////////////////////////////////
 // Pixel shader for lighting
-////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 #version 330
 
 out vec4 FragColor;
 
-// These definitions agree with the ObjectIds enum in scene.h
-const int     nullId	= 0;
-const int     skyId	= 1;
-const int     seaId	= 2;
-const int     groundId	= 3;
-const int     roomId	= 4;
-const int     boxId	= 5;
-const int     frameId	= 6;
-const int     lPicId	= 7;
-const int     rPicId	= 8;
-const int     teapotId	= 9;
-const int     spheresId	= 10;
-const int     floorId	= 11;
+// Object IDs corresponding to scene objects
+const int nullId = 0;
+const int skyId = 1;
+const int seaId = 2;
+const int groundId = 3;
+const int roomId = 4;
+const int boxId = 5;
+const int frameId = 6;
+const int lPicId = 7;
+const int rPicId = 8;
+const int teapotId = 9;
+const int spheresId = 10;
+const int floorId = 11;
 
-in vec3 normalVec;   
-in vec3 lightVec;   
-in vec3 worldPos;   
-in vec2 texCoord;  
+in vec3 normalVec;
+in vec3 lightVec;
+in vec3 worldPos;
+in vec2 texCoord;
 in vec3 eyePos;
 in vec3 tanVec;
 
@@ -30,14 +30,14 @@ uniform int objectId;
 uniform vec3 diffuse;
 uniform vec3 specular;
 uniform float shininess;
-uniform vec3 ambientLight; 
+uniform vec3 ambientLight;
 uniform vec3 lightIntensity;
 
 uniform sampler2D tex;
-uniform sampler2D normalMap;  
-uniform bool useNormalMap; 
+uniform sampler2D normalMap;
+uniform bool useNormalMap;
 uniform sampler2D skyDomeTexture;
-uniform bool useSkyReflect; 
+uniform bool useSkyReflect;
 
 // Fresnel term calculation
 vec3 computeFresnel(float LdotH, vec3 Ks) 
@@ -63,14 +63,9 @@ float computeDistribution(vec3 N, vec3 H, float shininess)
 // Sky reflection calculation
 vec3 computeSkyReflection(vec3 viewDir, vec3 normal) 
 {
-    // Calculate reflection vector R
     vec3 reflectDir = reflect(viewDir, normal);
-
-    // Calculate UV coordinates for the sky dome texture using R
     float u = -atan(reflectDir.y, reflectDir.x) / (2.0 * 3.14159);
     float v = acos(reflectDir.z) / 3.14159;
-
-    //Sky dome texture at the calculated UV
     return texture(skyDomeTexture, vec2(u, v)).rgb;
 }
 
@@ -89,110 +84,101 @@ vec2 adjustTexCoord()
 // Sample and apply normal map if enabled
 vec3 applyNormalMap(vec3 N, vec3 T, vec3 B, vec2 texCoords) 
 {
-    if (useNormalMap)
+    if (useNormalMap) 
     {
-        // Sample the normal map and convert it from [0,1] to [-1,1]
         vec3 delta = texture(normalMap, texCoords).xyz * 2.0 - vec3(1.0);
-        // Transform the normal map's delta vector to world space
         N = normalize(delta.x * T + delta.y * B + delta.z * N);
     }
     return N;
 }
 
+// Apply texture color based on object ID
+vec3 applyTextureColor(vec3 Kd, vec2 texCoords) 
+{
+    vec3 texColor = texture(tex, texCoords).rgb;
+    if (length(texColor) > 0.001) Kd *= texColor;
+
+    if (objectId == lPicId && (texCoords.x >= 0.98 || texCoords.y >= 0.98 || texCoords.x <= 0.02 || texCoords.y <= 0.02))
+        Kd = vec3(0.5);
+
+    if (objectId == rPicId) 
+    {
+        float stripeWidth = 0.1;
+        float stripe = mod(floor(texCoords.x / stripeWidth), 2.0);
+        Kd = stripe == 0.0 ? vec3(0.0) : vec3(1.0);
+    }
+    return Kd;
+}
+
+// Apply checkerboard pattern for ground, floor, and sea objects
+vec3 applyCheckerboardPattern(vec3 Kd, vec2 texCoords) 
+{
+    if (objectId == groundId || objectId == floorId || objectId == seaId) 
+    {
+        ivec2 uv = ivec2(floor(100.0 * texCoords));
+        if ((uv[0] + uv[1]) % 2 == 0)
+            Kd *= 0.9;
+    }
+    return Kd;
+}
+
+// Main function for lighting calculations
 void main() 
 {
     vec3 Kd = diffuse;
     vec3 Ks = specular;
 
+    // Adjust texture coordinates
     vec2 adjustedTexCoord = adjustTexCoord();
 
-    // Transform and normalize vectors
-    vec3 T = normalize(tanVec);             // Tangent vector
-    vec3 N = normalize(normalVec);          // Default normal vector
-    vec3 B = normalize(cross(T, N));        // Bitangent vector
-    mat3 TBN = mat3(T, B, N);               // TBN matrix
+    // Calculate tangent, normal, and bitangent vectors
+    vec3 T = normalize(tanVec);
+    vec3 N = normalize(normalVec);
+    vec3 B = normalize(cross(T, N));
+    mat3 TBN = mat3(T, B, N);
 
-    // Calculate the sky reflection if the object is the sky
+    // Calculate sky reflection for sky object
     if (objectId == skyId) 
     {
         vec2 skyTexCoord = vec2(-atan(normalize(eyePos - worldPos).y, normalize(eyePos - worldPos).x) / (2.0 * 3.14159265),
                                 acos(normalize(eyePos - worldPos).z) / 3.14159265);
         vec3 skyColor = texture(tex, skyTexCoord).rgb;
-        FragColor = vec4(skyColor, 1.0);  // Output sky color with full opacity
+        FragColor = vec4(skyColor, 1.0);
         return;
     }
 
     // Apply normal mapping if enabled
     N = applyNormalMap(N, T, B, adjustedTexCoord);
 
-    // Light and view direction calculations
-    vec3 L = normalize(lightVec - worldPos); // Light vector
-    vec3 V = normalize(eyePos - worldPos);   // View vector
-    vec3 H = normalize(L + V);               // Halfway vector
+    // Calculate light and view directions
+    vec3 L = normalize(lightVec - worldPos);
+    vec3 V = normalize(eyePos - worldPos);
+    vec3 H = normalize(L + V);
 
-    // Sample the diffuse texture color
-    vec3 texColor = texture(tex, adjustedTexCoord).rgb;
-    if (length(texColor) > 0.001) 
-    {
-        Kd *= texColor;  // Modulate diffuse color with the texture color if available
-    }
-
-    //For the house pic
-    if(objectId == lPicId)
-    {
-        if(adjustedTexCoord.x >= 0.98f ||adjustedTexCoord.y >= 0.98f 
-         || adjustedTexCoord.x <= 0.02f || adjustedTexCoord.y <= 0.02f)
-        {
-            Kd = vec3(0.5f, 0.5f, 0.5f);
-        }
-    }
-
-    if(objectId == rPicId)
-    {
-        float stripeWidth = 0.1f;
-
-        float stripe = mod(floor(adjustedTexCoord.x / stripeWidth), 2.0);
-
-        if(stripe == 0.0)
-        {
-            Kd = vec3(0.0f, 0.0f, 0.0f); // White color
-        }
-        else
-        {
-            Kd = vec3(1.0f, 1.0f, 1.0f); // Black color
-        }
-    }
+    // Sample texture color
+    Kd = applyTextureColor(Kd, adjustedTexCoord);
 
     // Calculate optional sky reflection
     vec3 skyReflection = useSkyReflect ? computeSkyReflection(V, N) : vec3(0.0);
 
     // Lighting terms
     float NdotL = max(dot(N, L), 0.0);
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotH = max(dot(N, H), 0.0);
-    float VdotH = max(dot(V, H), 0.0);
     float LdotH = max(dot(L, H), 0.0);
-
     vec3 F = computeFresnel(LdotH, Ks);
     float G = computeGeometric(LdotH);
     float D = computeDistribution(N, H, shininess);
 
-    vec3 BRDF_diffuse = (Kd / 3.14159);  
-    vec3 BRDF = BRDF_diffuse + ((F * G * D) / (4.0));
+    // BRDF (Bidirectional Reflectance Distribution Function) components
+    vec3 BRDF_diffuse = (Kd / 3.14159);
+    vec3 BRDF = BRDF_diffuse + (F * G * D) / 4.0;
 
-    // Checkerboard pattern for ground, floor, and sea (optional)
-    if (objectId == groundId || objectId == floorId || objectId == seaId) 
-    {
-        ivec2 uv = ivec2(floor(100.0 * adjustedTexCoord));
-        if ((uv[0] + uv[1]) % 2 == 0)
-            Kd *= 0.9;
-    }
+    // Apply checkerboard pattern if applicable
+    Kd = applyCheckerboardPattern(Kd, adjustedTexCoord);
 
-    // Ambient and direct lighting contributions
-    vec3 scene_ambient = ambientLight * Kd; 
-    vec3 IiNdotL = lightIntensity * NdotL;
-
-    vec3 finalColor = scene_ambient + IiNdotL * BRDF;
+    // Final color calculation: ambient + direct lighting + optional sky reflection
+    vec3 sceneAmbient = ambientLight * Kd;
+    vec3 directLight = lightIntensity * NdotL;
+    vec3 finalColor = sceneAmbient + directLight * BRDF;
 
     FragColor.xyz = finalColor + skyReflection;
 }
