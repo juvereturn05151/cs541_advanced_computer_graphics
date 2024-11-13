@@ -18,6 +18,7 @@ const int rPicId = 8;
 const int teapotId = 9;
 const int spheresId = 10;
 const int floorId = 11;
+const float PI = 3.14159265;
 
 in vec3 normalVec;
 in vec3 lightVec;
@@ -140,8 +141,8 @@ void main()
     // Calculate sky reflection for sky object
     if (objectId == skyId) 
     {
-        vec2 skyTexCoord = vec2(-atan(normalize(eyePos - worldPos).y, normalize(eyePos - worldPos).x) / (2.0 * 3.14159265),
-                                acos(normalize(eyePos - worldPos).z) / 3.14159265);
+        vec2 skyTexCoord = vec2(-atan(normalize(eyePos - worldPos).y, normalize(eyePos - worldPos).x) / (2.0 * PI),
+                                acos(normalize(eyePos - worldPos).z) / PI);
         vec3 skyColor = texture(tex, skyTexCoord).rgb;
         FragColor = vec4(skyColor, 1.0);
         return;
@@ -169,7 +170,7 @@ void main()
     float D = computeDistribution(N, H, shininess);
 
     // BRDF (Bidirectional Reflectance Distribution Function) components
-    vec3 BRDF_diffuse = (Kd / 3.14159);
+    vec3 BRDF_diffuse = (Kd / PI);
     vec3 BRDF = BRDF_diffuse + (F * G * D) / 4.0;
 
     // Apply checkerboard pattern if applicable
