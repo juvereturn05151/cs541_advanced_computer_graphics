@@ -74,33 +74,37 @@ vec3 computeSkyReflection(vec3 viewDir, vec3 normal)
     return texture(skyDomeTexture, vec2(u, v)).rgb;
 }
 
-void main() {
+// Adjust texture coordinates based on object ID
+vec2 adjustTexCoord() 
+{
+    if (objectId == roomId)
+        return texCoord.yx / 0.05;
+    if (objectId == groundId || objectId == seaId)
+        return texCoord.xy / 0.01;
+    if (objectId == lPicId || objectId == rPicId)
+        return (texCoord.xy - 0.1) / 0.8;
+    return texCoord.xy;
+}
+
+// Sample and apply normal map if enabled
+vec3 applyNormalMap(vec3 N, vec3 T, vec3 B, vec2 texCoords) 
+{
+    if (useNormalMap)
+    {
+        // Sample the normal map and convert it from [0,1] to [-1,1]
+        vec3 delta = texture(normalMap, texCoords).xyz * 2.0 - vec3(1.0);
+        // Transform the normal map's delta vector to world space
+        N = normalize(delta.x * T + delta.y * B + delta.z * N);
+    }
+    return N;
+}
+
+void main() 
+{
     vec3 Kd = diffuse;
     vec3 Ks = specular;
 
-    vec2 adjustedTexCoord;
-
-    //Adjust texture coordinates to the point that I'm satisfied
-    if(objectId == roomId)
-    {
-        adjustedTexCoord = (texCoord.yx  / 0.05f)  ;
-    }
-    else if( objectId == groundId || objectId == seaId )
-    {
-        adjustedTexCoord = (texCoord.xy  / 0.01f)  ;
-    }
-    else if( objectId == lPicId)
-    {
-        adjustedTexCoord = (texCoord.xy  - 0.1) / 0.8;
-    }
-    else if( objectId == rPicId)
-    {
-        adjustedTexCoord = (texCoord.xy  - 0.1) / 0.8;
-    }
-    else
-    {
-        adjustedTexCoord = texCoord.xy;
-    }
+    vec2 adjustedTexCoord = adjustTexCoord();
 
     // Transform and normalize vectors
     vec3 T = normalize(tanVec);             // Tangent vector
@@ -118,16 +122,8 @@ void main() {
         return;
     }
 
-    // Adjust normal vector based on normal map if it exists
-    if (useNormalMap) 
-    {
-        // Sample the normal map and convert it from [0,1] to [-1,1]
-        vec3 delta = texture(normalMap, adjustedTexCoord).xyz;
-        delta = delta * 2.0 - vec3(1.0, 1.0, 1.0);
-
-        // Transform the normal map's delta vector to world space
-        N = delta.x * T + delta.y * B + delta.z * N;
-    }
+    // Apply normal mapping if enabled
+    N = applyNormalMap(N, T, B, adjustedTexCoord);
 
     // Light and view direction calculations
     vec3 L = normalize(lightVec - worldPos); // Light vector
