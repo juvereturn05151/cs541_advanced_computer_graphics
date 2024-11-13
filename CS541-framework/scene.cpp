@@ -158,7 +158,6 @@ void Scene::InitializeScene()
     Texture* wallTexture = new Texture("textures/Standard_red_pxr128.png");
     Texture* skyTexture = new Texture("skys/Tropical_Beach_8k.jpg");
     Texture* leftFrameTexture = new Texture("textures/my-house-01.png");
-    Texture* rightFrameTexture = new Texture("textures/juve.jpg");
 
     //NormalMap
     Texture* floorNormalMap = new Texture("textures/6670-normal.jpg");
@@ -236,7 +235,7 @@ void Scene::InitializeScene()
     ground     = new Object(GroundPolygons, groundId, white, white, 3, grassTexture);
     sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100, NULL, seaNormalMap, skyTexture);
     leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons, leftFrameTexture);
-    rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons, rightFrameTexture);
+    rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons);
     spheres    = SphereOfSpheres(SpherePolygons);
 #ifdef REFL
     spheres->drawMe = true;

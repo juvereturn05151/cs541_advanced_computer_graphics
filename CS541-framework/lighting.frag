@@ -68,13 +68,17 @@ vec3 getSkyReflection(vec3 V, vec3 N)
     float v = acos(R.z) / 3.14159;
     vec2 skyUV = vec2(u, v);
 
-    // Sample the sky dome texture at the calculated UV
+    //Sky dome texture at the calculated UV
     return texture(skyDomeTexture, skyUV).rgb;
 }
 
 void main() {
+    vec3 Kd = diffuse;
+    vec3 Ks = specular;
+
     vec2 adjustedTexCoord;
 
+    //Adjust texture coordinates to the point that I'm satisfied
     if(objectId == roomId)
     {
         adjustedTexCoord = (texCoord.yx  / 0.05f)  ;
@@ -84,6 +88,10 @@ void main() {
         adjustedTexCoord = (texCoord.xy  / 0.01f)  ;
     }
     else if( objectId == lPicId)
+    {
+        adjustedTexCoord = (texCoord.xy  - 0.1) / 0.8;
+    }
+    else if( objectId == rPicId)
     {
         adjustedTexCoord = (texCoord.xy  - 0.1) / 0.8;
     }
@@ -124,22 +132,36 @@ void main() {
     vec3 V = normalize(eyePos - worldPos);   // View vector
     vec3 H = normalize(L + V);               // Halfway vector
 
-    vec3 Kd = diffuse;
-    vec3 Ks = specular;
-
     // Sample the diffuse texture color
     vec3 texColor = texture(tex, adjustedTexCoord).rgb;
     if (length(texColor) > 0.001) 
     {
-        Kd = texColor;  // Modulate diffuse color with the texture color if available
+        Kd *= texColor;  // Modulate diffuse color with the texture color if available
     }
 
+    //For the house pic
     if(objectId == lPicId)
     {
         if(adjustedTexCoord.x >= 0.98f ||adjustedTexCoord.y >= 0.98f 
          || adjustedTexCoord.x <= 0.02f || adjustedTexCoord.y <= 0.02f)
         {
             Kd = vec3(0.5f, 0.5f, 0.5f);
+        }
+    }
+
+    if(objectId == rPicId)
+    {
+        float stripeWidth = 0.1f;
+
+        float stripe = mod(floor(adjustedTexCoord.x / stripeWidth), 2.0);
+
+        if(stripe == 0.0)
+        {
+            Kd = vec3(0.0f, 0.0f, 0.0f); // White color
+        }
+        else
+        {
+            Kd = vec3(1.0f, 1.0f, 1.0f); // Black color
         }
     }
 
