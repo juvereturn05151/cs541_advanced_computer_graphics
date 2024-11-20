@@ -278,6 +278,15 @@ void Scene::InitializeScene()
         room->add(rightFrame, Translate( 1.5, 9.85, 1.)*Scale(0.8, 0.8, 0.8));
     }
 
+    shadowFbo = new FBO();
+    shadowFbo->CreateFBO(1024, 1024);
+
+    // Create the shadow mapping shader
+    shadowProgram = new ShaderProgram();
+    shadowProgram->AddShader("shadow.vert", GL_VERTEX_SHADER);
+    shadowProgram->AddShader("shadow.frag", GL_FRAGMENT_SHADER);
+    shadowProgram->LinkProgram();
+
     CHECKERROR;
 
     // Options menu stuff
@@ -382,49 +391,92 @@ void Scene::DrawScene()
     //   Unset the shader
     ////////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////
+    // Shadow Pass
+    ////////////////////////////////////////////////////////////////////////////
+    int shadowLoc, shadowProgramId;
+
+    shadowFbo->BindFBO(); // Bind the FBO for shadow map rendering
+    glViewport(0, 0, shadowFbo->width, shadowFbo->height); // Set FBO viewport size
+    glClear(GL_DEPTH_BUFFER_BIT); // Clear the depth buffer only
+
+    shadowProgram->UseShader(); // Use shadow map shader
+    shadowProgramId = shadowProgram->programId;
+
     CHECKERROR;
-    int loc, programId;
+
+    glm::mat4 LightPerspective = WorldProj; 
+    glm::mat4 LightView = ComputeLookAtMatrix(lightPos, glm::vec3(0.0), glm::vec3(0, 1, 0));
+    glm::mat4 BiasMatrix = glm::mat4(
+        0.5, 0.0, 0.0, 0.0,
+        0.0, 0.5, 0.0, 0.0,
+        0.0, 0.0, 0.5, 0.0,
+        0.5, 0.5, 0.5, 1.0
+    );
+    glm::mat4 ShadowMatrix = BiasMatrix * LightPerspective * LightView;
+
+    shadowLoc = glGetUniformLocation(shadowProgramId, "ProjectionMatrix");
+    glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightPerspective));
+    shadowLoc = glGetUniformLocation(shadowProgramId, "ViewMatrix");
+    glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightView));
+
+
+    // Render the scene from the light's perspective
+    objectRoot->Draw(shadowProgram, Identity);
+
+    shadowProgram->UnuseShader();
+    shadowFbo->UnbindFBO(); // Unbind the FBO
 
     ////////////////////////////////////////////////////////////////////////////////
     // Lighting pass
     ////////////////////////////////////////////////////////////////////////////////
-    
+
+    int lightLoc, lightProgramId;
     // Choose the lighting shader
     lightingProgram->UseShader();
-    programId = lightingProgram->programId;
+    lightProgramId = lightingProgram->programId;
 
     // Set the viewport, and clear the screen
     glViewport(0, 0, width, height);
     glClearColor(0.5, 0.5, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
-
     // @@ The scene specific parameters (uniform variables) used by
     // the shader are set here.  Object specific parameters are set in
     // the Draw procedure in object.cpp
     
-    loc = glGetUniformLocation(programId, "WorldProj");
-    glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(WorldProj));
-    loc = glGetUniformLocation(programId, "WorldView");
-    glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(WorldView));
-    loc = glGetUniformLocation(programId, "WorldInverse");
-    glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(WorldInverse));
-    loc = glGetUniformLocation(programId, "lightPos");
-    glUniform3fv(loc, 1, &(lightPos[0]));   
-    loc = glGetUniformLocation(programId, "lightIntensity");
-    glUniform3fv(loc, 1, &(lightIntensity[0]));
-    loc = glGetUniformLocation(programId, "ambientLight");
-    glUniform3fv(loc, 1, &(ambientLight[0]));
-    loc = glGetUniformLocation(programId, "mode");
-    glUniform1i(loc, mode);
+    lightLoc = glGetUniformLocation(lightProgramId, "WorldProj");
+    glUniformMatrix4fv(lightLoc, 1, GL_FALSE, Pntr(WorldProj));
+    lightLoc = glGetUniformLocation(lightProgramId, "WorldView");
+    glUniformMatrix4fv(lightLoc, 1, GL_FALSE, Pntr(WorldView));
+    lightLoc = glGetUniformLocation(lightProgramId, "WorldInverse");
+    glUniformMatrix4fv(lightLoc, 1, GL_FALSE, Pntr(WorldInverse));
+    lightLoc = glGetUniformLocation(lightProgramId, "lightPos");
+    glUniform3fv(lightLoc, 1, &(lightPos[0]));   
+    lightLoc = glGetUniformLocation(lightProgramId, "lightIntensity");
+    glUniform3fv(lightLoc, 1, &(lightIntensity[0]));
+    lightLoc = glGetUniformLocation(lightProgramId, "ambientLight");
+    glUniform3fv(lightLoc, 1, &(ambientLight[0]));
+    lightLoc = glGetUniformLocation(lightProgramId, "mode");
+    glUniform1i(lightLoc, mode);
     CHECKERROR;
 
+    // Bind the shadow map to a texture unit
+    glActiveTexture(GL_TEXTURE2); // Activate texture unit 2
+    glBindTexture(GL_TEXTURE_2D, shadowFbo->textureID); // Bind shadow map texture
+    glUniform1i(glGetUniformLocation(lightingProgram->programId, "shadowMap"), 2);
+
+    lightLoc = glGetUniformLocation(lightingProgram->programId, "ShadowMatrix");
+    glUniformMatrix4fv(lightLoc, 1, GL_FALSE, Pntr(ShadowMatrix));
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     // Draw all objects (This recursively traverses the object hierarchy.)
     CHECKERROR;
     objectRoot->Draw(lightingProgram, Identity);
     CHECKERROR; 
+    glCullFace(GL_BACK);
+    glDisable(GL_CULL_FACE);
 
-    
     // Turn off the shader
     lightingProgram->UnuseShader();
 
@@ -469,4 +521,44 @@ void Scene::HandleMovement()
     float groundHeight = proceduralground->HeightAt(eye.x, eye.y);
     eye.z = groundHeight;
 
+}
+
+Scene::~Scene()
+{
+    if (shadowFbo != NULL)
+    {
+        delete shadowFbo;
+    }
+}
+
+glm::mat4 Scene::ComputeLookAtMatrix(const glm::vec3& E, const glm::vec3& C, const glm::vec3& U) 
+{
+    // Step 1: Compute basis vectors
+    glm::vec3 V = glm::normalize(C - E);                // Forward vector
+    glm::vec3 A = glm::normalize(glm::cross(V, U));     // Right vector
+    glm::vec3 B = glm::cross(A, V);                     // True up vector
+
+    // Step 2: Create rotation matrix
+    glm::mat4 R = glm::mat4(1.0f); // Identity matrix
+    R[0][0] = A.x; R[1][0] = A.y; R[2][0] = A.z;
+    R[0][1] = B.x; R[1][1] = B.y; R[2][1] = B.z;
+    R[0][2] = -V.x; R[1][2] = -V.y; R[2][2] = -V.z;
+
+    // Step 3: Create translation matrix
+    glm::mat4 T = glm::mat4(1.0f); // Identity matrix
+    T[3][0] = -E.x;
+    T[3][1] = -E.y;
+    T[3][2] = -E.z;
+
+    glm::mat4 result(1.0);
+
+    result = {
+    { A.x, A.y, A.z, 0.0f },
+    { B.x, B.y, B.z, 0.0f },
+    { -V.x, -V.y, -V.z, 0.0f },
+    { glm::dot(-A, E),glm::dot(-B, E), glm::dot(V, E), 1.0f},
+    };
+
+    // Step 4: Combine rotation and translation
+    return result;
 }

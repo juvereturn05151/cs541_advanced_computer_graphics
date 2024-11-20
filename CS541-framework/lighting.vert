@@ -6,6 +6,7 @@
 #version 330
 
 uniform mat4 WorldView, WorldInverse, WorldProj, ModelTr, NormalTr;
+uniform mat4 ShadowMatrix; // Matrix to transform world space to light's clip space
 
 in vec4 vertex;
 in vec3 vertexNormal;
@@ -18,22 +19,33 @@ out vec3 lightVec;
 out vec2 texCoord; 
 out vec3 eyePos;
 out vec3 tanVec;
+out vec4 shadowCoord; // Shadow coordinates to pass to fragment shader
 
 uniform vec3 lightPos;
 
 void main()
 {      
-    gl_Position = WorldProj*WorldView*ModelTr*vertex;
+    // Transform vertex position into screen space
+    gl_Position = WorldProj * WorldView * ModelTr * vertex;
     
-    worldPos = (ModelTr*vertex).xyz;
+    // Compute world-space position
+    worldPos = (ModelTr * vertex).xyz;
 
-    normalVec = vertexNormal*mat3(NormalTr); 
+    // Transform normal vector
+    normalVec = vertexNormal * mat3(NormalTr);
 
+    // Compute vector from fragment to light source
     lightVec = lightPos - worldPos;
 
-    eyePos = (WorldInverse * vec4(0,0,0,1)).xyz;
+    // Compute eye position in world space
+    eyePos = (WorldInverse * vec4(0, 0, 0, 1)).xyz;
 
+    // Transform tangent vector
     tanVec = mat3(ModelTr) * vertexTangent;
 
-    texCoord = vertexTexture; 
+    // Pass texture coordinates
+    texCoord = vertexTexture;
+
+    // Compute shadow coordinates in light's clip space
+    shadowCoord = ShadowMatrix * ModelTr * vertex;
 }

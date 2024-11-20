@@ -82,10 +82,12 @@ public:
     // Shader programs
     ShaderProgram* lightingProgram;
     // @@ Declare additional shaders if necessary
-
+    ShaderProgram* shadowProgram;
 
     // Options menu stuff
     bool show_demo_window;
+
+    FBO* shadowFbo;
 
     void InitializeScene();
     void BuildTransforms();
@@ -93,5 +95,6 @@ public:
     void DrawScene();
     void UpdateTime();
     void HandleMovement();
-
+    glm::mat4 ComputeLookAtMatrix(const glm::vec3& E, const glm::vec3& C, const glm::vec3& U);
+    ~Scene();
 };

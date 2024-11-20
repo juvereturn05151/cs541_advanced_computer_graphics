@@ -26,6 +26,7 @@ in vec3 worldPos;
 in vec2 texCoord;
 in vec3 eyePos;
 in vec3 tanVec;
+in vec4 shadowCoord; // Added: Shadow coordinates from vertex shader
 
 uniform int objectId;
 uniform vec3 diffuse;
@@ -39,6 +40,9 @@ uniform sampler2D normalMap;
 uniform bool useNormalMap;
 uniform sampler2D skyDomeTexture;
 uniform bool useSkyReflect;
+
+// Added: Shadow map sampler
+uniform sampler2D shadowMap;
 
 // Fresnel term calculation
 vec3 computeFresnel(float LdotH, vec3 Ks) 
@@ -123,9 +127,34 @@ vec3 applyCheckerboardPattern(vec3 Kd, vec2 texCoords)
     return Kd;
 }
 
+// Shadow factor calculation
+bool IsInShadow(vec4 shadowCoord)
+{
+    // Transform shadow coordinates to texture space
+    vec2 shadowIndex = shadowCoord.xy / shadowCoord.w;
+
+    // Ensure the fragment is within the shadow map bounds
+    if (shadowIndex.x < 0.0 || shadowIndex.x > 1.0 ||
+        shadowIndex.y < 0.0 || shadowIndex.y > 1.0 || shadowCoord.w <= 0.0)
+    {
+        return false;
+    }
+
+    // Sample shadow map depth
+    float lightDepth = texture(shadowMap, shadowIndex.xy).w;
+    float pixelDepth = shadowCoord.w;
+    float bias = 0.005f; 
+
+    return pixelDepth > lightDepth + bias;
+}
+
 // Main function for lighting calculations
 void main() 
 {
+vec2 uv = gl_FragCoord.xy/vec2(1024,1024); // (or whatever screen size)
+ FragColor.xyz = vec3(texture(shadowMap, uv).w/100.0);  // or similar
+ return;  // which disables all further code in the shader
+
     vec3 Kd = diffuse;
     vec3 Ks = specular;
 
@@ -162,6 +191,8 @@ void main()
     // Calculate optional sky reflection
     vec3 skyReflection = useSkyReflect ? computeSkyReflection(V, N) : vec3(0.0);
 
+
+
     // Lighting terms
     float NdotL = max(dot(N, L), 0.0);
     float LdotH = max(dot(L, H), 0.0);
@@ -181,5 +212,16 @@ void main()
     vec3 directLight = lightIntensity * NdotL;
     vec3 finalColor = sceneAmbient + directLight * BRDF;
 
-    FragColor.xyz = finalColor + skyReflection;
+    // Calculate shadow factor
+    bool inShadow = IsInShadow(shadowCoord);
+
+    if(inShadow)
+    {
+        FragColor.xyz = sceneAmbient;
+    }
+    else
+    {
+        FragColor.xyz = finalColor + skyReflection;
+    }
+
 }

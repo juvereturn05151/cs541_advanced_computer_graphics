@@ -7,9 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "framework.vcxp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA427DF1-C598-454E-B973-A3BF507DFC6D}"
 	ProjectSection(SolutionItems) = preProject
+		fbo.h = fbo.h
 		lighting.frag = lighting.frag
 		lighting.vert = lighting.vert
 		object.h = object.h
+		shadow.frag = shadow.frag
+		shadow.vert = shadow.vert
 		texture.h = texture.h
 	EndProjectSection
 EndProject
