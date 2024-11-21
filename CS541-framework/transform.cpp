@@ -109,6 +109,8 @@ glm::mat4 Perspective(const float rx, const float ry,
     { 0.0f, 0.0f, -1.0f, 0.0f },
     };
 
+    P = glm::transpose(P);
+
     return P;
 }
 

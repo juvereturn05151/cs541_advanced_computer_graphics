@@ -145,7 +145,7 @@ bool IsInShadow(vec4 shadowCoord)
     float pixelDepth = shadowCoord.w;
     float bias = 0.005f; 
 
-    return (pixelDepth - bias) < lightDepth;
+    return (pixelDepth - bias) > lightDepth;
 }
 
 // Main function for lighting calculations

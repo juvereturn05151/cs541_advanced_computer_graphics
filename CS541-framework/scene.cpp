@@ -407,7 +407,8 @@ void Scene::DrawScene()
 
     CHECKERROR;
 
-    glm::mat4 LightProj = Perspective(40.0f / lightDist, 40.0f / lightDist, 1.0f, lightDist * 6); //WorldProj;// Perspective(40 / lightDist, 40 / lightDist, 1.0f, lightDist * 10);//; 
+    glm::mat4 LightProj = Perspective(40.0f / lightDist, 40.0f / lightDist, 0.1f, lightDist * 10); //WorldProj;// Perspective(40 / lightDist, 40 / lightDist, 1.0f, lightDist * 10);//; 
+    std::cout << glm::to_string(LightProj) << std::endl;
     glm::mat4 LightView = LookAt(lightPos, glm::vec3(0, 0, 0), glm::vec3(0.0, 0.0, 1.0));
     //glm::mat4 LightView = glm::lookAt(lightPos, glm::vec3(0, 0, 0), glm::vec3(0.0, 0.0, 1.0));
 

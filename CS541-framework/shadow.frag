@@ -6,7 +6,7 @@ in vec4 position;
 
 void main()
 {
-    //FragColor = position;
+    FragColor = position;
     //for debugging
-    FragColor = vec4(position.w/100.0f);
+    //FragColor = vec4(position.w/100.0f);
 }
