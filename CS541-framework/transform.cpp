@@ -112,4 +112,44 @@ glm::mat4 Perspective(const float rx, const float ry,
     return P;
 }
 
+glm::mat4 LookAt(const glm::vec3 Eye, const glm::vec3 Center, const glm::vec3 Up) 
+{
+    glm::vec3 V = glm::normalize(Center - Eye);
+    glm::vec3 A = glm::normalize(glm::cross(V, Up));
+    glm::vec3 B = glm::cross(A, V);
+    glm::mat4 result = glm::mat4(1);
 
+    result[0][0] = A.x;
+    result[1][0] = A.y;
+    result[2][0] = A.z;
+    result[3][0] = -glm::dot(A, Eye);
+
+    result[0][1] = B.x;
+    result[1][1] = B.y;
+    result[2][1] = B.z;
+    result[3][1] = -glm::dot(B, Eye);
+
+    result[0][2] = -V.x;
+    result[1][2] = -V.y;
+    result[2][2] = -V.z;
+    result[3][2] = glm::dot(V, Eye);
+
+    return result;
+
+    /*glm::vec3 V = glm::normalize(Center - Eye);
+    glm::vec3 A = glm::normalize(glm::cross(V, Up));
+    glm::vec3 B = glm::cross(A, V);
+
+    const glm::mat4 T = Translate(-1 * Eye.x, -1 * Eye.y, -1 * Eye.z);
+
+    glm::mat4 R =
+    {
+        A.x,  A.y,  A.z,  0.0f,
+        B.x,  B.y,  B.z,  0.0f,
+       -V.x, -V.y, -V.z,  0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+    R = glm::transpose(R);
+
+    return R * T;*/
+}
