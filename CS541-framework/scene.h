@@ -87,7 +87,7 @@ public:
     // Options menu stuff
     bool show_demo_window;
 
-    FBO* shadowFbo;
+    FBO* shadowFBO;
 
     void InitializeScene();
     void BuildTransforms();
