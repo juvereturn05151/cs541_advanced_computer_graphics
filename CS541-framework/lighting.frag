@@ -145,15 +145,15 @@ bool IsInShadow(vec4 shadowCoord)
     float pixelDepth = shadowCoord.w;
     float bias = 0.005f; 
 
-    return pixelDepth > lightDepth + bias;
+    return (pixelDepth - bias) < lightDepth;
 }
 
 // Main function for lighting calculations
 void main() 
 {
- vec2 uv = gl_FragCoord.xy/vec2(750,750); // (or whatever screen size)
- FragColor.xyz = vec3(texture(shadowMap, uv).w/100.0);  // or similar
- return;  // which disables all further code in the shader
+ //vec2 uv = gl_FragCoord.xy/vec2(750,750); // (or whatever screen size)
+ //FragColor.xyz = vec3(texture(shadowMap, uv).w/100.0);  // or similar
+ //return;  // which disables all further code in the shader
 
     vec3 Kd = diffuse;
     vec3 Ks = specular;

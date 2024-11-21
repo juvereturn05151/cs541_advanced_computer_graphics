@@ -237,11 +237,11 @@ void Scene::InitializeScene()
     leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons, leftFrameTexture);
     rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons);
     spheres    = SphereOfSpheres(SpherePolygons);
-#ifdef REFL
+//#ifdef REFL
     spheres->drawMe = true;
-#else
+/*#else
     spheres->drawMe = false;
-#endif
+#endif*/
 
 
     // @@ To change the scene hierarchy, examine the hierarchy created
@@ -397,7 +397,7 @@ void Scene::DrawScene()
     ////////////////////////////////////////////////////////////////////////////
     int shadowLoc, shadowProgramId;
 
-    //shadowFBO->BindFBO(); // Bind the FBO for shadow map rendering
+    shadowFBO->BindFBO(); // Bind the FBO for shadow map rendering
     glViewport(0, 0, shadowFBO->width, shadowFBO->height); // Set FBO viewport size
     glClearColor(0.5, 0.5, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the depth buffer only
@@ -407,37 +407,30 @@ void Scene::DrawScene()
 
     CHECKERROR;
 
-    glm::vec3 lightDir = -glm::normalize(lightPos);
-
-    glm::mat4 LightProj = WorldProj;// Perspective(40 / lightDist, 40 / lightDist, 1.0f, lightDist * 10);//; 
+    glm::mat4 LightProj = Perspective(40.0f / lightDist, 40.0f / lightDist, 1.0f, lightDist * 6); //WorldProj;// Perspective(40 / lightDist, 40 / lightDist, 1.0f, lightDist * 10);//; 
     glm::mat4 LightView = LookAt(lightPos, glm::vec3(0, 0, 0), glm::vec3(0.0, 0.0, 1.0));
-    glm::mat4 BiasMatrix = glm::mat4(
-        0.5, 0.0, 0.0, 0.0,
-        0.0, 0.5, 0.0, 0.0,
-        0.0, 0.0, 0.5, 0.0,
-        0.5, 0.5, 0.5, 1.0
-    );
-    glm::mat4 ShadowMatrix = BiasMatrix * LightProj * LightView;
+    //glm::mat4 LightView = glm::lookAt(lightPos, glm::vec3(0, 0, 0), glm::vec3(0.0, 0.0, 1.0));
+
 
     shadowLoc = glGetUniformLocation(shadowProgramId, "LightProj");
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightProj));
     shadowLoc = glGetUniformLocation(shadowProgramId, "LightView");
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightView));
 
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_FRONT);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     // Render the scene from the light's perspective
     objectRoot->Draw(shadowProgram, Identity);
-    //glCullFace(GL_BACK);
-    //glDisable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glDisable(GL_CULL_FACE);
 
     shadowProgram->UnuseShader();
-    //shadowFBO->UnbindFBO(); // Unbind the FBO
+    shadowFBO->UnbindFBO(); // Unbind the FBO
 
     ////////////////////////////////////////////////////////////////////////////////
     // Lighting pass
     ////////////////////////////////////////////////////////////////////////////////
-    /*
+    
     int lightLoc, lightProgramId;
     // Choose the lighting shader
     lightingProgram->UseShader();
@@ -448,7 +441,7 @@ void Scene::DrawScene()
     glClearColor(0.5, 0.5, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
-    shadowFBO->BindTexture(2, lightProgramId, "shadowMap");
+    shadowFBO->BindTexture(3, lightProgramId, "shadowMap");
     CHECKERROR;
 
     // @@ The scene specific parameters (uniform variables) used by
@@ -477,6 +470,14 @@ void Scene::DrawScene()
     //glBindTexture(GL_TEXTURE_2D, shadowFbo->textureID); // Bind shadow map texture
     //glUniform1i(glGetUniformLocation(lightProgramId, "shadowMap"), 2);
 
+    glm::mat4 BiasMatrix = glm::mat4(
+        0.5, 0.0, 0.0, 0.0,
+        0.0, 0.5, 0.0, 0.0,
+        0.0, 0.0, 0.5, 0.0,
+        0.5, 0.5, 0.5, 1.0
+    );
+    glm::mat4 ShadowMatrix = BiasMatrix * LightProj * LightView;
+
     lightLoc = glGetUniformLocation(lightProgramId, "ShadowMatrix");
     glUniformMatrix4fv(lightLoc, 1, GL_FALSE, Pntr(ShadowMatrix));
     CHECKERROR;
@@ -490,7 +491,7 @@ void Scene::DrawScene()
 
     // Turn off the shader
     lightingProgram->UnuseShader();
-    */
+    
 
     ////////////////////////////////////////////////////////////////////////////////
     // End of Lighting pass

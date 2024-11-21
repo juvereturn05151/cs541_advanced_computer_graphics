@@ -117,9 +117,22 @@ glm::mat4 LookAt(const glm::vec3 Eye, const glm::vec3 Center, const glm::vec3 Up
     glm::vec3 V = glm::normalize(Center - Eye);
     glm::vec3 A = glm::normalize(glm::cross(V, Up));
     glm::vec3 B = glm::cross(A, V);
+
+
+    glm::mat4 T = Translate(-1 * Eye.x, -1 * Eye.y, -1 * Eye.z);
+
     glm::mat4 result = glm::mat4(1);
 
-    result[0][0] = A.x;
+    result[0] = glm::vec4(A, 0);
+    result[1] = glm::vec4(B, 0);
+    result[2] = glm::vec4(-V, 0);
+
+    result = glm::transpose(result) * T;
+
+    return result;
+
+
+   /* result[0][0] = A.x;
     result[1][0] = A.y;
     result[2][0] = A.z;
     result[3][0] = -glm::dot(A, Eye);
@@ -132,9 +145,9 @@ glm::mat4 LookAt(const glm::vec3 Eye, const glm::vec3 Center, const glm::vec3 Up
     result[0][2] = -V.x;
     result[1][2] = -V.y;
     result[2][2] = -V.z;
-    result[3][2] = glm::dot(V, Eye);
+    result[3][2] = glm::dot(V, Eye);*/
 
-    return result;
+
 
     /*glm::vec3 V = glm::normalize(Center - Eye);
     glm::vec3 A = glm::normalize(glm::cross(V, Up));
