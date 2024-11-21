@@ -406,19 +406,19 @@ void Scene::DrawScene()
 
     CHECKERROR;
 
-    glm::mat4 LightPerspective = Perspective(40 / lightDist, 40/lightDist, 1.0f, lightDist *10);//WorldProj; 
-    glm::mat4 LightView = ComputeLookAtMatrix(lightPos, glm::vec3(0.0), glm::vec3(0, 0, 1));
+    glm::mat4 LightProj = Perspective(40 / lightDist, 40/lightDist, 1.0f, lightDist * 10);//WorldProj; 
+    glm::mat4 LightView = ComputeLookAtMatrix(lightPos, glm::vec3(0.0), glm::vec3(0, 1, 0));
     glm::mat4 BiasMatrix = glm::mat4(
         0.5, 0.0, 0.0, 0.0,
         0.0, 0.5, 0.0, 0.0,
         0.0, 0.0, 0.5, 0.0,
         0.5, 0.5, 0.5, 1.0
     );
-    glm::mat4 ShadowMatrix = BiasMatrix * LightPerspective * LightView;
+    glm::mat4 ShadowMatrix = BiasMatrix * LightProj * LightView;
 
-    shadowLoc = glGetUniformLocation(shadowProgramId, "ProjectionMatrix");
-    glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightPerspective));
-    shadowLoc = glGetUniformLocation(shadowProgramId, "ViewMatrix");
+    shadowLoc = glGetUniformLocation(shadowProgramId, "LightProj");
+    glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightProj));
+    shadowLoc = glGetUniformLocation(shadowProgramId, "LightView");
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightView));
 
     glEnable(GL_CULL_FACE);
@@ -536,7 +536,6 @@ Scene::~Scene()
 
 glm::mat4 Scene::ComputeLookAtMatrix(const glm::vec3& E, const glm::vec3& C, const glm::vec3& U) 
 {
-    // Step 1: Compute basis vectors
     glm::vec3 V = glm::normalize(C - E);                // Forward vector
     glm::vec3 A = glm::normalize(glm::cross(V, U));     // Right vector
     glm::vec3 B = glm::cross(A, V);                     // True up vector
@@ -544,12 +543,11 @@ glm::mat4 Scene::ComputeLookAtMatrix(const glm::vec3& E, const glm::vec3& C, con
     glm::mat4 result(1.0);
 
     result = {
-    { A.x, A.y, A.z, 0.0f },
-    { B.x, B.y, B.z, 0.0f },
-    { -V.x, -V.y, -V.z, 0.0f },
-    { glm::dot(-A, E),glm::dot(-B, E), glm::dot(V, E), 1.0f},
+    { A.x, B.x,  -V.x, 0.0f },
+    { A.y, B.y,  -V.y, 0.0f },
+    { A.z,  B.z, -V.z, 0.0f },
+    { -glm::dot(A, E),-glm::dot(B, E), glm::dot(V, E), 1.0f},
     };
 
-    // Step 4: Combine rotation and translation
     return result;
 }
