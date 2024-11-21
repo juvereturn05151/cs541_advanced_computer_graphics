@@ -151,7 +151,7 @@ bool IsInShadow(vec4 shadowCoord)
 // Main function for lighting calculations
 void main() 
 {
- vec2 uv = gl_FragCoord.xy/vec2(1024,1024); // (or whatever screen size)
+ vec2 uv = gl_FragCoord.xy/vec2(750,750); // (or whatever screen size)
  FragColor.xyz = vec3(texture(shadowMap, uv).w/100.0);  // or similar
  return;  // which disables all further code in the shader
 

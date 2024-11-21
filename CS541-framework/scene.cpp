@@ -398,7 +398,7 @@ void Scene::DrawScene()
     int shadowLoc, shadowProgramId;
 
     //shadowFBO->BindFBO(); // Bind the FBO for shadow map rendering
-    glViewport(0, 0, 400, 400); // Set FBO viewport size
+    glViewport(0, 0, shadowFBO->width, shadowFBO->height); // Set FBO viewport size
     glClearColor(0.5, 0.5, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the depth buffer only
 
