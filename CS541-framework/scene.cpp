@@ -407,18 +407,19 @@ void Scene::DrawScene()
 
     CHECKERROR;
 
+    //Magic number that created light projection
     glm::mat4 LightProj = Perspective(40.0f / lightDist, 40.0f / lightDist, 0.1f, lightDist * 10);
-    std::cout << glm::to_string(LightProj) << std::endl;
     glm::mat4 LightView = LookAt(lightPos, glm::vec3(0, 0, 0), glm::vec3(0.0, 0.0, 1.0));
 
+    //Shadow Specific Passing
     shadowLoc = glGetUniformLocation(shadowProgramId, "LightProj");
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightProj));
     shadowLoc = glGetUniformLocation(shadowProgramId, "LightView");
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightView));
 
+    // Render the scene from the light's perspective
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
-    // Render the scene from the light's perspective
     objectRoot->Draw(shadowProgram, Identity);
     glCullFace(GL_BACK);
     glDisable(GL_CULL_FACE);
@@ -446,7 +447,6 @@ void Scene::DrawScene()
     // @@ The scene specific parameters (uniform variables) used by
     // the shader are set here.  Object specific parameters are set in
     // the Draw procedure in object.cpp
-    
     lightLoc = glGetUniformLocation(lightProgramId, "WorldProj");
     glUniformMatrix4fv(lightLoc, 1, GL_FALSE, Pntr(WorldProj));
     lightLoc = glGetUniformLocation(lightProgramId, "WorldView");
@@ -470,6 +470,7 @@ void Scene::DrawScene()
         0.0, 0.0, 0.5, 0.0,
         0.5, 0.5, 0.5, 1.0
     );
+
     glm::mat4 ShadowMatrix = BiasMatrix * LightProj * LightView;
 
     lightLoc = glGetUniformLocation(lightProgramId, "ShadowMatrix");
@@ -480,13 +481,11 @@ void Scene::DrawScene()
     objectRoot->Draw(lightingProgram, Identity);
     CHECKERROR; 
 
-
     shadowFBO->UnbindFBO();
 
     // Turn off the shader
     lightingProgram->UnuseShader();
     
-
     ////////////////////////////////////////////////////////////////////////////////
     // End of Lighting pass
     ////////////////////////////////////////////////////////////////////////////////

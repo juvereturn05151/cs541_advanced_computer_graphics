@@ -9,8 +9,6 @@
 // Methods consist of a constructor, and a Draw procedure, and an
 // append for building hierarchies of objects.
 
-
-
 #include "math.h"
 #include <fstream>
 #include <stdlib.h>
@@ -34,12 +32,10 @@ using namespace gl;
 
 Object::Object(Shape* _shape, const int _objectId, const glm::vec3 _diffuseColor, const glm::vec3 _specularColor, const float _shininess, Texture* _texture, Texture* _normalMap, Texture* _skyDome)
     : diffuseColor(_diffuseColor), specularColor(_specularColor), shininess(_shininess),
-      shape(_shape), objectId(_objectId), drawMe(true), texture(_texture), normalMap(_normalMap), skyDome(_skyDome)
-     
+      shape(_shape), objectId(_objectId), drawMe(true), texture(_texture), normalMap(_normalMap), skyDome(_skyDome) 
 {
     
 }
-
 
 void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
 {
