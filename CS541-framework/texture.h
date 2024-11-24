@@ -13,6 +13,14 @@
 // identifies it.  It also supplies two methods for binding and
 // unbinding the texture to/from a shader.
 
+enum TextureSlot
+{
+    Tex,
+    Normal,
+    SkyDome,
+    ShadowMap
+};
+
 class Texture
 {
  public:

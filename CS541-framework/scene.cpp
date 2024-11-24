@@ -407,11 +407,9 @@ void Scene::DrawScene()
 
     CHECKERROR;
 
-    glm::mat4 LightProj = Perspective(40.0f / lightDist, 40.0f / lightDist, 0.1f, lightDist * 10); //WorldProj;// Perspective(40 / lightDist, 40 / lightDist, 1.0f, lightDist * 10);//; 
+    glm::mat4 LightProj = Perspective(40.0f / lightDist, 40.0f / lightDist, 0.1f, lightDist * 10);
     std::cout << glm::to_string(LightProj) << std::endl;
     glm::mat4 LightView = LookAt(lightPos, glm::vec3(0, 0, 0), glm::vec3(0.0, 0.0, 1.0));
-    //glm::mat4 LightView = glm::lookAt(lightPos, glm::vec3(0, 0, 0), glm::vec3(0.0, 0.0, 1.0));
-
 
     shadowLoc = glGetUniformLocation(shadowProgramId, "LightProj");
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightProj));
@@ -442,7 +440,7 @@ void Scene::DrawScene()
     glClearColor(0.5, 0.5, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
-    shadowFBO->BindTexture(3, lightProgramId, "shadowMap");
+    shadowFBO->BindTexture(TextureSlot::ShadowMap, lightProgramId, "shadowMap");
     CHECKERROR;
 
     // @@ The scene specific parameters (uniform variables) used by
@@ -465,11 +463,6 @@ void Scene::DrawScene()
     glUniform1i(lightLoc, mode);
     CHECKERROR;
 
-
-    // Bind the shadow map to a texture unit
-    //glActiveTexture(GL_TEXTURE2); // Activate texture unit 2
-    //glBindTexture(GL_TEXTURE_2D, shadowFbo->textureID); // Bind shadow map texture
-    //glUniform1i(glGetUniformLocation(lightProgramId, "shadowMap"), 2);
 
     glm::mat4 BiasMatrix = glm::mat4(
         0.5, 0.0, 0.0, 0.0,

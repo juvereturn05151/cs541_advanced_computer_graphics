@@ -9,6 +9,8 @@
 // Methods consist of a constructor, and a Draw procedure, and an
 // append for building hierarchies of objects.
 
+
+
 #include "math.h"
 #include <fstream>
 #include <stdlib.h>
@@ -50,7 +52,7 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     // are also set here.  Call texture->Bind in texture.cpp to do so.
     if (texture != NULL) 
     {
-        texture->BindTexture(0, program->programId, "tex");
+        texture->BindTexture(TextureSlot::Tex, program->programId, "tex");
     }
 
     // Inform the shader of the surface values Kd, Ks, and alpha.
@@ -88,7 +90,7 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
 
     if (normalMap != NULL)
     {
-        normalMap->BindTexture(1, program->programId, "normalMap");
+        normalMap->BindTexture(TextureSlot::Normal, program->programId, "normalMap");
     }
 
     bool hasSkyDome = (skyDome != NULL);
@@ -97,7 +99,7 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
 
     if (skyDome != NULL) 
     {
-        skyDome->BindTexture(2, program->programId, "skyDomeTexture");
+        skyDome->BindTexture(TextureSlot::SkyDome, program->programId, "skyDomeTexture");
     }
 
     // Draw this object
@@ -125,12 +127,14 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     CHECKERROR;
     // Recursively draw each sub-objects, each with its own transformation.
     if (drawMe)
-        for (int i=0;  i<instances.size();  i++) {
+        for (int i=0;  i<instances.size();  i++) 
+        {
             CHECKERROR;
             glm::mat4 itr = objectTr*instances[i].second*animTr;
             CHECKERROR;
             instances[i].first->Draw(program, itr);
-            CHECKERROR; }
+            CHECKERROR; 
+        }
     
     CHECKERROR;
 }
