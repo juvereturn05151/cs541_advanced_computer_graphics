@@ -18,7 +18,9 @@ enum TextureSlot
     Tex,
     Normal,
     SkyDome,
-    ShadowMap
+    ShadowMap,
+    UpperReflectionMap,
+    LowerReflectionMap
 };
 
 class Texture

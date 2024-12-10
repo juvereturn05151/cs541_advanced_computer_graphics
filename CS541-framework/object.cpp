@@ -30,11 +30,13 @@ using namespace gl;
 #define CHECKERROR {GLenum err = glGetError(); if (err != GL_NO_ERROR) { fprintf(stderr, "OpenGL error (at line object.cpp:%d): %s\n", __LINE__, gluErrorString(err)); exit(-1);} }
 
 
-Object::Object(Shape* _shape, const int _objectId, const glm::vec3 _diffuseColor, const glm::vec3 _specularColor, const float _shininess, Texture* _texture, Texture* _normalMap, Texture* _skyDome)
+Object::Object(Shape* _shape, const int _objectId, const glm::vec3 _diffuseColor, const glm::vec3 _specularColor,
+    const float _shininess, Texture* _texture, Texture* _normalMap, Texture* _skyDome, bool _isReflective)
     : diffuseColor(_diffuseColor), specularColor(_specularColor), shininess(_shininess),
-      shape(_shape), objectId(_objectId), drawMe(true), texture(_texture), normalMap(_normalMap), skyDome(_skyDome) 
+    shape(_shape), objectId(_objectId), drawMe(true), texture(_texture), normalMap(_normalMap), skyDome(_skyDome),
+    isReflective(_isReflective)
 {
-    
+
 }
 
 void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
@@ -46,7 +48,7 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
 
     // @@ Textures, being uniform sampler2d variables in the shader,
     // are also set here.  Call texture->Bind in texture.cpp to do so.
-    if (texture != NULL) 
+    if (texture != NULL)
     {
         texture->BindTexture(TextureSlot::Tex, program->programId, "tex");
     }
@@ -71,7 +73,7 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     // normals, is calculated and passed to the shader here.
     loc = glGetUniformLocation(program->programId, "ModelTr");
     glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(objectTr));
-    
+
     glm::mat4 inv = glm::inverse(objectTr);
     loc = glGetUniformLocation(program->programId, "NormalTr");
     glUniformMatrix4fv(loc, 1, GL_FALSE, Pntr(inv));
@@ -93,15 +95,18 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     loc = glGetUniformLocation(program->programId, "useSkyReflect");
     glUniform1i(loc, hasSkyDome);
 
-    if (skyDome != NULL) 
+    if (skyDome != NULL)
     {
         skyDome->BindTexture(TextureSlot::SkyDome, program->programId, "skyDomeTexture");
     }
 
+    loc = glGetUniformLocation(program->programId, "isReflective");
+    glUniform1i(loc, isReflective);
+
     // Draw this object
     CHECKERROR;
     if (shape)
-        if (drawMe) 
+        if (drawMe)
             shape->DrawVAO();
     CHECKERROR;
 
@@ -109,7 +114,7 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     {
         texture->UnbindTexture(0);
     }
-    
+
     if (normalMap != nullptr)
     {
         normalMap->UnbindTexture(0);
@@ -123,14 +128,14 @@ void Object::Draw(ShaderProgram* program, glm::mat4& objectTr)
     CHECKERROR;
     // Recursively draw each sub-objects, each with its own transformation.
     if (drawMe)
-        for (int i=0;  i<instances.size();  i++) 
+        for (int i = 0; i < instances.size(); i++)
         {
             CHECKERROR;
-            glm::mat4 itr = objectTr*instances[i].second*animTr;
+            glm::mat4 itr = objectTr * instances[i].second * animTr;
             CHECKERROR;
             instances[i].first->Draw(program, itr);
-            CHECKERROR; 
+            CHECKERROR;
         }
-    
+
     CHECKERROR;
 }

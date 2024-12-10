@@ -30,6 +30,8 @@ class Object
     int objectId;               // Object id to be sent to the shader
     bool drawMe;                // Toggle specifies if this object (and children) are drawn.
 
+    bool isReflective;
+
     glm::vec3 diffuseColor;          // Diffuse color of object
     glm::vec3 specularColor;         // Specular color of object
     float shininess;            // Surface roughness value
@@ -38,8 +40,8 @@ class Object
     Texture* skyDome;
     std::vector<INSTANCE> instances; // Pairs of sub-objects and transformations 
 
-    Object(Shape* _shape, const int objectId, const glm::vec3 _d=glm::vec3(), const glm::vec3 _s=glm::vec3(), 
-        const float _n=1, Texture* _texture = NULL, Texture* _normalMap = NULL, Texture* _skyDome = NULL);
+    Object(Shape* _shape, const int objectId, const glm::vec3 _d = glm::vec3(), const glm::vec3 _s = glm::vec3(),
+        const float _n = 1, Texture* _texture = NULL, Texture* _normalMap = NULL, Texture* _skyDome = NULL, bool _isReflective = false);
 
     // If this object is to be drawn with a texture, this is a good
     // place to store the texture id (a small positive integer).  The

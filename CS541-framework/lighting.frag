@@ -148,6 +148,21 @@ bool IsInShadow(vec4 shadowCoord)
     return (pixelDepth - bias) > lightDepth;
 }
 
+vec3 GetV()
+{
+    return normalize(eyePos - worldPos);
+}
+
+vec3 GetN()
+{
+    return normalize(normalVec);
+}
+
+void AddFragColorValue(vec4 addValue)
+{
+    FragColor += addValue; 
+}
+
 // Main function for lighting calculations
 void LightingPixel() 
 {

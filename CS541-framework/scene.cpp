@@ -243,7 +243,7 @@ void Scene::InitializeScene()
     anim       = new Object(NULL, nullId);
     room       = new Object(RoomPolygons, roomId, brickColor, white, 3, wallTexture, wallNormalMap);
     floor      = new Object(FloorPolygons, floorId, white, white, 3, floorTexture, floorNormalMap);
-    teapot     = new Object(TeapotPolygons, teapotId, white, brightSpec, 100, teapotTexture);
+    teapot = new Object(TeapotPolygons, teapotId, white, brightSpec, 100, teapotTexture, NULL, NULL, true);
     podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10, podiumTexture, podiumNormalMap);
     sky        = new Object(SpherePolygons, skyId, black, white, 2, skyTexture);
     ground     = new Object(GroundPolygons, groundId, white, white, 3, grassTexture);
@@ -436,6 +436,15 @@ void Scene::DrawScene()
     shadowLoc = glGetUniformLocation(shadowProgramId, "LightView");
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, Pntr(LightView));
 
+    glm::mat4 BiasMatrix = glm::mat4(
+        0.5, 0.0, 0.0, 0.0,
+        0.0, 0.5, 0.0, 0.0,
+        0.0, 0.0, 0.5, 0.0,
+        0.5, 0.5, 0.5, 1.0
+    );
+
+    glm::mat4 ShadowMatrix = BiasMatrix * LightProj * LightView;
+
     // Render the scene from the light's perspective
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
@@ -446,6 +455,81 @@ void Scene::DrawScene()
     shadowProgram->UnuseShader();
     shadowFBO->UnbindFBO(); // Unbind the FBO
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // Reflection pass
+    ////////////////////////////////////////////////////////////////////////////////
+    int reflectionLoc, reflectionProgramId;
+
+    reflectProgram->UseShader();
+    CHECKERROR;
+    reflectionProgramId = reflectProgram->programId;
+
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "WorldProj");
+    glUniformMatrix4fv(reflectionLoc, 1, GL_FALSE, Pntr(WorldProj));
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "WorldView");
+    glUniformMatrix4fv(reflectionLoc, 1, GL_FALSE, Pntr(WorldView));
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "WorldInverse");
+    glUniformMatrix4fv(reflectionLoc, 1, GL_FALSE, Pntr(WorldInverse));
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "lightPos");
+    glUniform3fv(reflectionLoc, 1, &(lightPos[0]));
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "lightIntensity");
+    glUniform3fv(reflectionLoc, 1, &(lightIntensity[0]));
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "ambientLight");
+    glUniform3fv(reflectionLoc, 1, &(ambientLight[0]));
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "mode");
+    glUniform1i(reflectionLoc, mode);
+
+    shadowFBO->BindTexture(TextureSlot::ShadowMap, reflectionProgramId, "shadowMap");
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "ShadowMatrix");
+    glUniformMatrix4fv(reflectionLoc, 1, GL_FALSE, Pntr(ShadowMatrix));
+
+    glm::vec3 reflectionCenter = glm::vec3(0, 0, 1.5);
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "centerOfReflection");
+    glUniform3fv(reflectionLoc, 1, &reflectionCenter[0]);
+
+    // bind top reflect FBO
+    reflectTop->BindFBO();
+
+    glViewport(0, 0, reflectTop->width, reflectTop->height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // send that it is top pass 1
+    int isTop = 1;
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "reflectionHalf");
+    glUniform1i(reflectionLoc, isTop);
+
+
+    // drawReflective()
+    objectRoot->Draw(reflectProgram, Identity);
+    CHECKERROR;
+
+    // unbind top reflect FBO
+    reflectTop->UnbindFBO();
+
+
+    // bind bottom reflect FBO
+    reflectBot->BindFBO();
+
+    glViewport(0, 0, reflectBot->width, reflectBot->height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // send that it is bottom pass -1
+    isTop = -1;
+    reflectionLoc = glGetUniformLocation(reflectionProgramId, "reflectionHalf");
+    glUniform1i(reflectionLoc, isTop);
+
+    // drawReflective()
+    objectRoot->Draw(reflectProgram, Identity);
+    CHECKERROR;
+
+
+    // unbind bottom reflect FBO
+    reflectBot->UnbindFBO();
+
+    reflectProgram->UnuseShader();
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // End of Reflection pass
+    ////////////////////////////////////////////////////////////////////////////////
+    teapot->drawMe = true;
     ////////////////////////////////////////////////////////////////////////////////
     // Lighting pass
     ////////////////////////////////////////////////////////////////////////////////
@@ -461,6 +545,10 @@ void Scene::DrawScene()
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
     shadowFBO->BindTexture(TextureSlot::ShadowMap, lightProgramId, "shadowMap");
+    CHECKERROR;
+    reflectTop->BindTexture(TextureSlot::UpperReflectionMap, lightProgramId, "upperReflectionMap");
+    CHECKERROR;
+    reflectBot->BindTexture(TextureSlot::LowerReflectionMap, lightProgramId, "lowerReflectionMap");
     CHECKERROR;
 
     // @@ The scene specific parameters (uniform variables) used by
@@ -483,14 +571,7 @@ void Scene::DrawScene()
     CHECKERROR;
 
 
-    glm::mat4 BiasMatrix = glm::mat4(
-        0.5, 0.0, 0.0, 0.0,
-        0.0, 0.5, 0.0, 0.0,
-        0.0, 0.0, 0.5, 0.0,
-        0.5, 0.5, 0.5, 1.0
-    );
 
-    glm::mat4 ShadowMatrix = BiasMatrix * LightProj * LightView;
 
     lightLoc = glGetUniformLocation(lightProgramId, "ShadowMatrix");
     glUniformMatrix4fv(lightLoc, 1, GL_FALSE, Pntr(ShadowMatrix));
