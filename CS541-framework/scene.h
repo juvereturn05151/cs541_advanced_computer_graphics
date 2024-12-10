@@ -16,6 +16,7 @@
 #include "object.h"
 #include "texture.h"
 #include "fbo.h"
+#include "HDR.h"
 
 enum ObjectIds {
     nullId	= 0,
