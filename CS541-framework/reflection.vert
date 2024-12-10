@@ -12,10 +12,11 @@ vec3 GetWorldPos();
 void LightingVertex(vec3 eye);
 
 void main()
-{      
+{
+    // Step 1: Set EYE to center-of-reflection
     LightingVertex(centerOfReflection);
 
-    // Step 2: Set EYE to center-of-reflection and calculate R
+    // Step 2: calculate R
     vec3 R = GetWorldPos() - centerOfReflection;
     float lengthR = length(R); 
 

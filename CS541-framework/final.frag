@@ -40,12 +40,14 @@ void main()
             // Top paraboloid
             uv = vec2(a / (1.0 + c), b / (1.0 + c)) * 0.5 + vec2(0.5,0.5);
             reflectionColor = texture(upperReflectionMap, uv).rgb ;
+
             //For debugging
             //reflectionColor = vec3(0.0f,0.0f,1.0f);
         } else {
             // Bottom paraboloid
             uv = vec2(a / (1.0 - c), b / (1.0 - c)) * 0.5 + vec2(0.5,0.5);
             reflectionColor = texture(lowerReflectionMap, uv).rgb; 
+
             //For debugging
             //reflectionColor = vec3(1.0f,0.0f,0.0f);
         }

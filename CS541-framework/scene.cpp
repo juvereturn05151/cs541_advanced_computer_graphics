@@ -269,10 +269,10 @@ void Scene::InitializeScene()
         objectRoot->add(sea); 
         objectRoot->add(ground); }
     objectRoot->add(central);
-#ifndef REFL
+/*#ifndef REFL
     objectRoot->add(room,  Translate(0.0, 0.0, 0.02));
 #endif
-    objectRoot->add(floor, Translate(0.0, 0.0, 0.02));
+    objectRoot->add(floor, Translate(0.0, 0.0, 0.02));*/
 
     // Central model has a rudimentary animation (constant rotation on Z)
     animated.push_back(anim);
