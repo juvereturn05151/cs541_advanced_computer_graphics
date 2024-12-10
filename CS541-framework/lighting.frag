@@ -149,12 +149,8 @@ bool IsInShadow(vec4 shadowCoord)
 }
 
 // Main function for lighting calculations
-void main() 
+void LightingPixel() 
 {
- //vec2 uv = gl_FragCoord.xy/vec2(750,750); // (or whatever screen size)
- //FragColor.xyz = vec3(texture(shadowMap, uv).w/100.0);  // or similar
- //return;  // which disables all further code in the shader
-
     vec3 Kd = diffuse;
     vec3 Ks = specular;
 
@@ -191,8 +187,6 @@ void main()
     // Calculate optional sky reflection
     vec3 skyReflection = useSkyReflect ? computeSkyReflection(V, N) : vec3(0.0);
 
-
-
     // Lighting terms
     float NdotL = max(dot(N, L), 0.0);
     float LdotH = max(dot(L, H), 0.0);
@@ -223,5 +217,4 @@ void main()
     {
         FragColor.xyz = finalColor + skyReflection;
     }
-
 }

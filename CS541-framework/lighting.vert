@@ -23,8 +23,8 @@ out vec4 shadowCoord; // Shadow coordinates to pass to fragment shader
 
 uniform vec3 lightPos;
 
-void main()
-{      
+void LightingVertex() 
+{
     // Transform vertex position into screen space
     gl_Position = WorldProj * WorldView * ModelTr * vertex;
     
