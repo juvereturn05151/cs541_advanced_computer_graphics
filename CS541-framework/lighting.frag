@@ -40,6 +40,7 @@ uniform sampler2D normalMap;
 uniform bool useNormalMap;
 uniform sampler2D skyDomeTexture;
 uniform bool useSkyReflect;
+//uniform sampler2D irrMap; //TODO
 
 // Added: Shadow map sampler
 uniform sampler2D shadowMap;
@@ -211,6 +212,8 @@ void LightingPixel()
 
     // BRDF (Bidirectional Reflectance Distribution Function) components
     vec3 BRDF_diffuse = (Kd / PI);
+    //FOR IBL
+    //TODO: Kd/ PI * (irradiance(N))
     vec3 BRDF = BRDF_diffuse + (F * G * D) / 4.0;
 
     // Apply checkerboard pattern if applicable
@@ -231,5 +234,7 @@ void LightingPixel()
     else
     {
         FragColor.xyz = finalColor + skyReflection;
+        //TODO: for IBL
+        // Add tone mapping equation here C = ec...
     }
 }
