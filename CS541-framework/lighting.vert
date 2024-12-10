@@ -23,6 +23,34 @@ out vec4 shadowCoord; // Shadow coordinates to pass to fragment shader
 
 uniform vec3 lightPos;
 
+void LightingVertex(vec3 eye) 
+{
+    // Transform vertex position into screen space
+    gl_Position = WorldProj * WorldView * ModelTr * vertex;
+    
+    // Compute world-space position
+    worldPos = (ModelTr * vertex).xyz;
+
+    // Transform normal vector
+    normalVec = vertexNormal * mat3(NormalTr);
+
+    // Compute vector from fragment to light source
+    lightVec = lightPos - worldPos;
+
+    // Compute eye position in world space
+    eyePos = eye;
+
+    // Transform tangent vector
+    tanVec = mat3(ModelTr) * vertexTangent;
+
+    // Pass texture coordinates
+    texCoord = vertexTexture;
+
+    // Compute shadow coordinates in light's clip space
+    shadowCoord = ShadowMatrix * ModelTr * vertex;
+}
+
+
 void LightingVertex() 
 {
     // Transform vertex position into screen space
@@ -48,4 +76,9 @@ void LightingVertex()
 
     // Compute shadow coordinates in light's clip space
     shadowCoord = ShadowMatrix * ModelTr * vertex;
+}
+
+vec3 GetWorldPos()
+{
+    return worldPos;
 }

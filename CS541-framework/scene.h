@@ -81,6 +81,7 @@ public:
 
     // Shader programs
     ShaderProgram* lightingProgram;
+    ShaderProgram* reflectProgram;
     // @@ Declare additional shaders if necessary
     ShaderProgram* shadowProgram;
 
@@ -88,6 +89,8 @@ public:
     bool show_demo_window;
 
     FBO* shadowFBO;
+    FBO* reflectTop;
+    FBO* reflectBot;
 
     void InitializeScene();
     void BuildTransforms();

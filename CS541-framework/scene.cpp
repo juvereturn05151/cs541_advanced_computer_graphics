@@ -187,6 +187,17 @@ void Scene::InitializeScene()
     glBindAttribLocation(lightingProgram->programId, 3, "vertexTangent");
     lightingProgram->LinkProgram();
 
+    reflectProgram = new ShaderProgram();
+    reflectProgram->AddShader("reflection.vert", GL_VERTEX_SHADER);
+    reflectProgram->AddShader("reflection.frag", GL_FRAGMENT_SHADER);
+    reflectProgram->AddShader("lighting.vert", GL_VERTEX_SHADER);
+    reflectProgram->AddShader("lighting.frag", GL_FRAGMENT_SHADER);
+
+    glBindAttribLocation(reflectProgram->programId, 0, "vertex");
+    glBindAttribLocation(reflectProgram->programId, 1, "vertexNormal");
+    glBindAttribLocation(reflectProgram->programId, 2, "vertexTexture");
+    glBindAttribLocation(reflectProgram->programId, 3, "vertexTangent");
+    reflectProgram->LinkProgram();
 
     
     // Create all the Polygon shapes
@@ -283,6 +294,11 @@ void Scene::InitializeScene()
 
     shadowFBO = new FBO();
     shadowFBO->CreateFBO(1024, 1024);
+
+    reflectTop = new FBO();
+    reflectTop->CreateFBO(1024, 1024);
+    reflectBot = new FBO();
+    reflectBot->CreateFBO(1024, 1024);
 
     // Create the shadow mapping shader
     shadowProgram = new ShaderProgram();
