@@ -165,6 +165,9 @@ void Scene::InitializeScene()
     Texture* seaNormalMap = new Texture("textures/ripples_normalmap.png");
     Texture* wallNormalMap = new Texture("textures/Standard_red_pxr128_normal.png");
 
+    irrMap = new HDR("ibl/Newport_Loft_Ref.irr.hdr");
+    skyHdr = new HDR("ibl/Newport_Loft_Ref.hdr");
+
     CHECKERROR;
     objectRoot = new Object(NULL, nullId);
 

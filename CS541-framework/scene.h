@@ -89,6 +89,13 @@ public:
     // Options menu stuff
     bool show_demo_window;
 
+    HDR* irrMap;
+    HDR* skyHdr;
+
+    double exposure;
+    double gamma;
+
+
     FBO* shadowFBO;
     FBO* reflectTop;
     FBO* reflectBot;
