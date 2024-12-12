@@ -19,6 +19,8 @@ const int teapotId = 9;
 const int spheresId = 10;
 const int floorId = 11;
 const float PI = 3.14159265;
+ const float exposure = 1.6; 
+
 
 in vec3 normalVec;
 in vec3 lightVec;
@@ -80,6 +82,20 @@ vec3 computeSkyReflection(vec3 viewDir, vec3 normal)
     return texture(skyDomeTexture, vec2(u, v)).rgb;
 }
 
+vec3 toLinear(vec3 inputColor)
+{
+   vec3 outputColor = (exposure * inputColor) / (exposure * inputColor + vec3(1.0));
+   outputColor = pow(outputColor, vec3(2.2));
+   return outputColor;
+}
+
+vec3 toSRGB(vec3 inputColor)
+{
+   vec3 outputColor = (exposure * inputColor) / (exposure * inputColor + vec3(1.0));
+   outputColor = pow(outputColor, vec3(1.0 / 2.2));
+   return outputColor;
+}
+
 // Adjust texture coordinates based on object ID
 vec2 adjustTexCoord() 
 {
@@ -118,6 +134,9 @@ vec3 applyTextureColor(vec3 Kd, vec2 texCoords)
         float stripe = mod(floor(texCoords.x / stripeWidth), 2.0);
         Kd = stripe == 0.0 ? vec3(0.0) : vec3(1.0);
     }
+
+    Kd = toLinear(Kd);
+
     return Kd;
 }
 
@@ -210,7 +229,7 @@ void CalculateReflection()
         }
 
         // Combine reflection with lighting 
-        AddFragColorValue(vec4( reflectionColor, 1.0));
+        FragColor += vec4( reflectionColor, 1.0);
     }
 }
 
@@ -237,6 +256,7 @@ void LightingPixel()
                                 acos(normalize(eyePos - worldPos).z) / PI);
         vec3 skyColor = texture(tex, skyTexCoord).rgb;
         FragColor = vec4(skyColor, 1.0);
+        FragColor.xyz = toSRGB(FragColor.xyz);
         return;
     }
 
@@ -265,9 +285,7 @@ void LightingPixel()
     CalculateReflection();
 
     // BRDF (Bidirectional Reflectance Distribution Function) components
-    //FOR IBL
-    //vec3 BRDF_diffuse = (Kd / PI);
-    vec3 BRDF = computeIBLDiffuse(Kd,N); // + (F * G * D) / 4.0;
+    vec3 BRDF = computeIBLDiffuse(Kd,N); 
 
     // Apply checkerboard pattern if applicable
     Kd = applyCheckerboardPattern(Kd, adjustedTexCoord);
@@ -275,18 +293,13 @@ void LightingPixel()
     // Final color calculation: ambient + direct lighting + optional sky reflection
     vec3 sceneAmbient = ambientLight * Kd;
     vec3 directLight = lightIntensity * NdotL;
-    vec3 finalColor = sceneAmbient + BRDF /* directLight **/  ;
+    vec3 finalColor = sceneAmbient + BRDF;
 
     // Calculate shadow factor
     bool inShadow = IsInShadow(shadowCoord);
 
-    // Apply tone mapping
-   //finalColor += skyReflection;
+    FragColor.xyz += finalColor;
 
-   vec3 toneMappedColor = finalColor / (finalColor + vec3(1.0));
-
-   // Apply gamma correction
-   toneMappedColor = pow(toneMappedColor, vec3(1.0 / 2.2));
-
-   FragColor.xyz += toneMappedColor;
+   // Apply tone mapping
+   FragColor.xyz = toSRGB(FragColor.xyz);
 }
