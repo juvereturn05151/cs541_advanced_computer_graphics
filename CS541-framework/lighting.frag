@@ -19,7 +19,7 @@ const int teapotId = 9;
 const int spheresId = 10;
 const int floorId = 11;
 const float PI = 3.14159265;
- const float exposure = 1.6; 
+ const float exposure = 1.0; 
 
 
 in vec3 normalVec;
@@ -135,20 +135,15 @@ vec3 applyTextureColor(vec3 Kd, vec2 texCoords)
         Kd = stripe == 0.0 ? vec3(0.0) : vec3(1.0);
     }
 
-    Kd = toLinear(Kd);
-
-    return Kd;
-}
-
-// Apply checkerboard pattern for ground, floor, and sea objects
-vec3 applyCheckerboardPattern(vec3 Kd, vec2 texCoords) 
-{
     if (objectId == groundId || objectId == floorId || objectId == seaId) 
     {
         ivec2 uv = ivec2(floor(100.0 * texCoords));
         if ((uv[0] + uv[1]) % 2 == 0)
             Kd *= 0.9;
     }
+
+    Kd = toLinear(Kd);
+
     return Kd;
 }
 
@@ -199,7 +194,7 @@ void AddFragColorValue(vec4 addValue)
     FragColor += addValue; 
 }
 
-void CalculateReflection()
+vec3 CalculateReflection()
 {
     vec3 N = GetN();
     vec3 V = GetV();
@@ -229,8 +224,10 @@ void CalculateReflection()
         }
 
         // Combine reflection with lighting 
-        FragColor += vec4( reflectionColor, 1.0);
+        return reflectionColor;
     }
+
+    return vec3(0.0);
 }
 
 
@@ -282,13 +279,10 @@ void LightingPixel()
     float D = computeDistribution(N, H, shininess);
 
     //Do the reflection here
-    CalculateReflection();
+    Kd = Kd * 0.7 + 0.3 * CalculateReflection();
 
     // BRDF (Bidirectional Reflectance Distribution Function) components
     vec3 BRDF = computeIBLDiffuse(Kd,N); 
-
-    // Apply checkerboard pattern if applicable
-    Kd = applyCheckerboardPattern(Kd, adjustedTexCoord);
 
     // Final color calculation: ambient + direct lighting + optional sky reflection
     vec3 sceneAmbient = ambientLight * Kd;
