@@ -284,8 +284,7 @@ void LightingPixel()
     Kd = Kd + 0.3 * CalculateReflection();
 
     // BRDF (Bidirectional Reflectance Distribution Function) components
-    vec3 BRDF = computeIBLDiffuse(Kd,N); 
-
+    vec3 BRDF = computeIBLDiffuse(Kd,N) + (F * G * D) / 4.0; 
 
     // Final color calculation: ambient + direct lighting + optional sky reflection
     vec3 sceneAmbient = ambientLight * Kd;
