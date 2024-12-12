@@ -7,7 +7,6 @@
 #ifndef _TEXTURE_
 #define _TEXTURE_
 
-
 // This class reads an image from a file, stores it on the graphics
 // card as a texture, and stores the (small integer) texture id which
 // identifies it.  It also supplies two methods for binding and
@@ -20,10 +19,11 @@ enum TextureSlot
     SkyDome,
     ShadowMap,
     UpperReflectionMap,
-    LowerReflectionMap
+    LowerReflectionMap,
+    IrrMap
 };
 
-class Texture
+ class Texture
 {
  public:
     unsigned int textureId;

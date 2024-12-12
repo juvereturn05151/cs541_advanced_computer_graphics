@@ -40,7 +40,12 @@ uniform sampler2D normalMap;
 uniform bool useNormalMap;
 uniform sampler2D skyDomeTexture;
 uniform bool useSkyReflect;
-//uniform sampler2D irrMap; //TODO
+
+uniform bool isReflective; 
+uniform sampler2D upperReflectionMap; 
+uniform sampler2D lowerReflectionMap;
+
+uniform sampler2D irrMap; 
 
 // Added: Shadow map sampler
 uniform sampler2D shadowMap;
@@ -159,10 +164,56 @@ vec3 GetN()
     return normalize(normalVec);
 }
 
+vec3 computeIBLDiffuse(vec3 Kd, vec3 N)
+{
+    // Sample irradiance map using the normal vector
+    float u = -atan(-N.y, -N.x) / (2.0 * 3.14159);
+    float v = acos(N.z) / 3.14159;
+    vec3 irradiance = 100.0 * texture(irrMap, vec2(u, v)).rgb;
+
+    // Scale by the diffuse color (Kd)
+    return (Kd / PI) * irradiance;
+}
+
 void AddFragColorValue(vec4 addValue)
 {
     FragColor += addValue; 
 }
+
+void CalculateReflection()
+{
+    vec3 N = GetN();
+    vec3 V = GetV();
+
+    if (isReflective) 
+    { 
+        vec3 R = 2.0 * dot(V, N) * N - V;
+        float lengthR = length(R); 
+
+        float a = R.x / lengthR;
+        float b = R.y / lengthR;
+        float c = R.z / lengthR;
+
+
+        // Dual-Paraboloid Mapping
+        vec2 uv;
+        vec3 reflectionColor;
+        if (c > 0.0) 
+        {
+            // Top paraboloid
+            uv = vec2(a / (1.0 + c), b / (1.0 + c)) * 0.5 + vec2(0.5,0.5);
+            reflectionColor = texture(upperReflectionMap, uv).rgb ;
+        } else {
+            // Bottom paraboloid
+            uv = vec2(a / (1.0 - c), b / (1.0 - c)) * 0.5 + vec2(0.5,0.5);
+            reflectionColor = texture(lowerReflectionMap, uv).rgb; 
+        }
+
+        // Combine reflection with lighting 
+        AddFragColorValue(vec4( reflectionColor, 1.0));
+    }
+}
+
 
 // Main function for lighting calculations
 void LightingPixel() 
@@ -210,11 +261,13 @@ void LightingPixel()
     float G = computeGeometric(LdotH);
     float D = computeDistribution(N, H, shininess);
 
+    //Do the reflection here
+    CalculateReflection();
+
     // BRDF (Bidirectional Reflectance Distribution Function) components
-    vec3 BRDF_diffuse = (Kd / PI);
     //FOR IBL
-    //TODO: Kd/ PI * (irradiance(N))
-    vec3 BRDF = BRDF_diffuse + (F * G * D) / 4.0;
+    //vec3 BRDF_diffuse = (Kd / PI);
+    vec3 BRDF = computeIBLDiffuse(Kd,N); // + (F * G * D) / 4.0;
 
     // Apply checkerboard pattern if applicable
     Kd = applyCheckerboardPattern(Kd, adjustedTexCoord);
@@ -222,19 +275,18 @@ void LightingPixel()
     // Final color calculation: ambient + direct lighting + optional sky reflection
     vec3 sceneAmbient = ambientLight * Kd;
     vec3 directLight = lightIntensity * NdotL;
-    vec3 finalColor = sceneAmbient + directLight * BRDF;
+    vec3 finalColor = sceneAmbient + BRDF /* directLight **/  ;
 
     // Calculate shadow factor
     bool inShadow = IsInShadow(shadowCoord);
 
-    if(inShadow)
-    {
-        FragColor.xyz = sceneAmbient;
-    }
-    else
-    {
-        FragColor.xyz = finalColor + skyReflection;
-        //TODO: for IBL
-        // Add tone mapping equation here C = ec...
-    }
+    // Apply tone mapping
+   //finalColor += skyReflection;
+
+   vec3 toneMappedColor = finalColor / (finalColor + vec3(1.0));
+
+   // Apply gamma correction
+   toneMappedColor = pow(toneMappedColor, vec3(1.0 / 2.2));
+
+   FragColor.xyz += toneMappedColor;
 }

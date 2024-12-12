@@ -246,19 +246,20 @@ void Scene::InitializeScene()
     anim       = new Object(NULL, nullId);
     room       = new Object(RoomPolygons, roomId, brickColor, white, 3, wallTexture, wallNormalMap);
     floor      = new Object(FloorPolygons, floorId, white, white, 3, floorTexture, floorNormalMap);
-    teapot = new Object(TeapotPolygons, teapotId, white, brightSpec, 100, teapotTexture, NULL, NULL, true);
+    teapot     = new Object(TeapotPolygons, teapotId, white, brightSpec, 100, teapotTexture, NULL, NULL, true);
     podium     = new Object(BoxPolygons, boxId, glm::vec3(woodColor), polishedSpec, 10, podiumTexture, podiumNormalMap);
-    sky        = new Object(SpherePolygons, skyId, black, white, 2, skyTexture);
+    sky        = new Object(SpherePolygons, skyId, black, white, 2, skyHdr);
     ground     = new Object(GroundPolygons, groundId, white, white, 3, grassTexture);
     sea        = new Object(SeaPolygons, seaId, waterColor, brightSpec, 100, NULL, seaNormalMap, skyTexture);
     leftFrame  = FramedPicture(Identity, lPicId, BoxPolygons, QuadPolygons, leftFrameTexture);
     rightFrame = FramedPicture(Identity, rPicId, BoxPolygons, QuadPolygons);
     spheres    = SphereOfSpheres(SpherePolygons);
-//#ifdef REFL
+#ifdef REFL
     spheres->drawMe = true;
-/*#else
+#else
     spheres->drawMe = false;
-#endif*/
+#endif
+
 
 
     // @@ To change the scene hierarchy, examine the hierarchy created
@@ -269,8 +270,9 @@ void Scene::InitializeScene()
     // Scene is composed of sky, ground, sea, room and some central models
     if (fullPolyCount) {
         objectRoot->add(sky, Scale(2000.0, 2000.0, 2000.0));
-        objectRoot->add(sea); 
-        objectRoot->add(ground); }
+        //objectRoot->add(sea); 
+        //objectRoot->add(ground); 
+    }
     objectRoot->add(central);
 /*#ifndef REFL
     objectRoot->add(room,  Translate(0.0, 0.0, 0.02));
@@ -553,6 +555,7 @@ void Scene::DrawScene()
     CHECKERROR;
     reflectBot->BindTexture(TextureSlot::LowerReflectionMap, lightProgramId, "lowerReflectionMap");
     CHECKERROR;
+    irrMap->BindTexture(TextureSlot::IrrMap, lightProgramId, "irrMap");
 
     // @@ The scene specific parameters (uniform variables) used by
     // the shader are set here.  Object specific parameters are set in
