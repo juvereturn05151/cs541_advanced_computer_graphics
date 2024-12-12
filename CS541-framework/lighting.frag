@@ -139,7 +139,9 @@ vec3 applyTextureColor(vec3 Kd, vec2 texCoords)
     {
         ivec2 uv = ivec2(floor(100.0 * texCoords));
         if ((uv[0] + uv[1]) % 2 == 0)
+        {
             Kd *= 0.9;
+        }
     }
 
     Kd = toLinear(Kd);
@@ -279,10 +281,11 @@ void LightingPixel()
     float D = computeDistribution(N, H, shininess);
 
     //Do the reflection here
-    Kd = Kd * 0.7 + 0.3 * CalculateReflection();
+    Kd = Kd + 0.3 * CalculateReflection();
 
     // BRDF (Bidirectional Reflectance Distribution Function) components
     vec3 BRDF = computeIBLDiffuse(Kd,N); 
+
 
     // Final color calculation: ambient + direct lighting + optional sky reflection
     vec3 sceneAmbient = ambientLight * Kd;
